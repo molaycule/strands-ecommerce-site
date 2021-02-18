@@ -1,7 +1,15 @@
-import { FC, LegacyRef, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Utils } from 'utils';
+import Link from 'next/link';
+import routes from 'routes';
+import { PageHeaderLinks } from 'enums';
 
-const Header = () => {
+interface HeaderProps {
+  isHomePage: Boolean;
+  activeLink: PageHeaderLinks;
+}
+
+const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
   const headerDesktopRef = useRef<HTMLDivElement>(null);
   const wrapMenuRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLDivElement>(null);
@@ -10,6 +18,8 @@ const Header = () => {
   const showCartRef = useRef<HTMLDivElement>(null);
 
   const scrollHandler = () => {
+    if (!topBarRef?.current?.clientHeight) return;
+
     if (window.scrollY > topBarRef.current.clientHeight) {
       headerDesktopRef.current.classList.add('fix-menu-desktop');
       wrapMenuRef.current.style.top = '0';
@@ -44,7 +54,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header>
+    <header className={!isHomePage && 'header-v4'}>
       <div className='container-menu-desktop' ref={headerDesktopRef}>
         <div className='top-bar' ref={topBarRef}>
           <div className='content-topbar flex-sb-m h-full container'>
@@ -69,29 +79,58 @@ const Header = () => {
         </div>
         <div className='wrap-menu-desktop' ref={wrapMenuRef}>
           <nav className='limiter-menu-desktop container'>
-            <a href='#' className='logo'>
-              <img src='images/icons/logo-01.png' alt='IMG-LOGO' />
-            </a>
+            <Link href={routes.home}>
+              <a className='logo'>
+                <div className='img-logo' />
+              </a>
+            </Link>
 
             <div className='menu-desktop'>
               <ul className='main-menu'>
-                <li className='active-menu'>
-                  <a href='index.html'>Home</a>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.Home && 'active-menu'
+                  }>
+                  <Link href={routes.home}>
+                    <a>Home</a>
+                  </Link>
                 </li>
-                <li>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.Shop && 'active-menu'
+                  }>
                   <a href='product.html'>Shop</a>
                 </li>
-                <li className='label1' data-label1='hot'>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.Feature
+                      ? 'active-menu label1'
+                      : 'label1'
+                  }
+                  data-label1='hot'>
                   <a href='shoping-cart.html'>Features</a>
                 </li>
-                <li>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.Blog && 'active-menu'
+                  }>
                   <a href='blog.html'>Blog</a>
                 </li>
-                <li>
-                  <a href='about.html'>About</a>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.About && 'active-menu'
+                  }>
+                  <Link href={routes.about}>
+                    <a>About</a>
+                  </Link>
                 </li>
-                <li>
-                  <a href='contact.html'>Contact</a>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.Contact && 'active-menu'
+                  }>
+                  <Link href={routes.contact}>
+                    <a>Contact</a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -118,7 +157,7 @@ const Header = () => {
       <div className='wrap-header-mobile'>
         <div className='logo-mobile'>
           <a href='index.html'>
-            <img src='images/icons/logo-01.png' alt='IMG-LOGO' />
+            <div className='img-logo-mobile' />
           </a>
         </div>
 
@@ -173,7 +212,9 @@ const Header = () => {
         </ul>
         <ul className='main-menu-m'>
           <li>
-            <a href='index.html'>Home</a>
+            <Link href={routes.home}>
+              <a href='index.html'>Home</a>
+            </Link>
           </li>
           <li>
             <a href='product.html'>Shop</a>
@@ -190,10 +231,14 @@ const Header = () => {
             <a href='blog.html'>Blog</a>
           </li>
           <li>
-            <a href='about.html'>About</a>
+            <Link href={routes.about}>
+              <a>About</a>
+            </Link>
           </li>
           <li>
-            <a href='contact.html'>Contact</a>
+            <Link href={routes.contact}>
+              <a>Contact</a>
+            </Link>
           </li>
         </ul>
       </div>

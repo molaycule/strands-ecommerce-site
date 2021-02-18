@@ -18623,3 +18623,23 @@ iframe {
 .pointer-none {
   pointer-events: none;
 }
+
+.img-logo {
+  background-image: url(/images/logo.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 62px;
+  margin-left: -40px;
+}
+
+.img-logo-mobile {
+  background-image: url(/images/logo.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 120px;
+  height: 32px;
+  margin-left: -30px;
+}

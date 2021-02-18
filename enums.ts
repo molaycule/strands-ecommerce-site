@@ -6,3 +6,12 @@ export enum ProductCategory {
   Shoes,
   Watches
 }
+
+export enum PageHeaderLinks {
+  Home,
+  Shop,
+  Feature,
+  Blog,
+  About,
+  Contact
+}
