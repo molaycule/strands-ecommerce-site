@@ -75,10 +75,6 @@ const PageWrapper: FC<PageWrapperProps> = ({
           integrity='sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ=='
           crossOrigin='anonymous'
         />
-        <link
-          rel='stylesheet'
-          href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css'
-        />
       </Head>
       <Header isHomePage={isHomePage} activeLink={activeLink} />
       {children}
