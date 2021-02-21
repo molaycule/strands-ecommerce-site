@@ -5,7 +5,7 @@ import routes from 'routes';
 import { PageHeaderLinks } from 'enums';
 
 interface HeaderProps {
-  isHomePage: Boolean;
+  isHomePage: boolean;
   activeLink: PageHeaderLinks;
 }
 
@@ -77,7 +77,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
             </div>
           </div>
         </div>
-        <div className='wrap-menu-desktop' ref={wrapMenuRef}>
+        <div
+          className={`wrap-menu-desktop ${!isHomePage && 'how-shadow1'}`}
+          ref={wrapMenuRef}>
           <nav className='limiter-menu-desktop container'>
             <Link href={routes.home}>
               <a className='logo'>
@@ -99,7 +101,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                   className={
                     activeLink === PageHeaderLinks.Shop && 'active-menu'
                   }>
-                  <a href='product.html'>Shop</a>
+                  <Link href={routes.shop}>
+                    <a>Shop</a>
+                  </Link>
                 </li>
                 <li
                   className={
@@ -109,12 +113,6 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                   }
                   data-label1='hot'>
                   <a href='shoping-cart.html'>Features</a>
-                </li>
-                <li
-                  className={
-                    activeLink === PageHeaderLinks.Blog && 'active-menu'
-                  }>
-                  <a href='blog.html'>Blog</a>
                 </li>
                 <li
                   className={
@@ -217,7 +215,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
             </Link>
           </li>
           <li>
-            <a href='product.html'>Shop</a>
+            <Link href={routes.shop}>
+              <a>Shop</a>
+            </Link>
           </li>
           <li>
             <a
@@ -226,9 +226,6 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
               data-label1='hot'>
               Features
             </a>
-          </li>
-          <li>
-            <a href='blog.html'>Blog</a>
           </li>
           <li>
             <Link href={routes.about}>

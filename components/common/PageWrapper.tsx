@@ -10,7 +10,7 @@ import routes from 'routes';
 import BackToTop from './BackToTop';
 
 interface PageWrapperProps {
-  isHomePage?: Boolean;
+  isHomePage?: boolean;
   children: ReactNode | ReactNode[];
 }
 
@@ -30,6 +30,10 @@ const PageWrapper: FC<PageWrapperProps> = ({
       case routes.home:
         pageHeaderLink = PageHeaderLinks.Home;
         pageTitle = `${appName} | Home`;
+        break;
+      case routes.shop:
+        pageHeaderLink = PageHeaderLinks.Shop;
+        pageTitle = `${appName} | Products`;
         break;
       case routes.about:
         pageHeaderLink = PageHeaderLinks.About;

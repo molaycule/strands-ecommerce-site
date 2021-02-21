@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { ProductCategory } from 'enums';
 import { Utils } from 'utils';
 import ProductFilter from './ProductFilter';
@@ -11,7 +11,11 @@ export interface ProductItem extends ProductItemProps {
   category: ProductCategory;
 }
 
-const ProductOverview = () => {
+interface ProductOverviewProps {
+  showTitle?: boolean;
+}
+
+const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
   const showSearchRef = useRef<HTMLDivElement>(null);
   const panelSearchRef = useRef<HTMLDivElement>(null);
   const showFilterRef = useRef<HTMLDivElement>(null);
@@ -159,9 +163,11 @@ const ProductOverview = () => {
   return (
     <section className='bg0 p-t-23 p-b-140'>
       <div className='container'>
-        <div className='p-b-10'>
-          <h3 className='ltext-103 cl5'>Product Overview</h3>
-        </div>
+        {showTitle && (
+          <div className='p-b-10'>
+            <h3 className='ltext-103 cl5'>Product Overview</h3>
+          </div>
+        )}
         <div className='flex-w flex-sb-m p-b-52'>
           <ProductOverviewHeader
             productFilterHandler={productFilterHandler}
