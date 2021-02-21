@@ -31,8 +31,8 @@ const PageWrapper: FC<PageWrapperProps> = ({
         pageHeaderLink = PageHeaderLinks.Home;
         pageTitle = `${appName} | Home`;
         break;
-      case routes.shop:
-        pageHeaderLink = PageHeaderLinks.Shop;
+      case routes.products:
+        pageHeaderLink = PageHeaderLinks.Products;
         pageTitle = `${appName} | Products`;
         break;
       case routes.about:

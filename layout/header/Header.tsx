@@ -99,10 +99,10 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 </li>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.Shop && 'active-menu'
+                    activeLink === PageHeaderLinks.Products && 'active-menu'
                   }>
-                  <Link href={routes.shop}>
-                    <a>Shop</a>
+                  <Link href={routes.products}>
+                    <a>Products</a>
                   </Link>
                 </li>
                 <li
@@ -215,8 +215,8 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
             </Link>
           </li>
           <li>
-            <Link href={routes.shop}>
-              <a>Shop</a>
+            <Link href={routes.products}>
+              <a>Products</a>
             </Link>
           </li>
           <li>
