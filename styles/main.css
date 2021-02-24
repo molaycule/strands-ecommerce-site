@@ -1941,10 +1941,10 @@ input.num-product::-webkit-inner-spin-button {
   left: 0;
   z-index: 9000;
   overflow: auto;
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  transition: all 0.4s;
+  -webkit-transition: opacity 0.4s;
+  -o-transition: opacity 0.4s;
+  -moz-transition: opacity 0.4s;
+  transition: opacity 0.4s;
   visibility: hidden;
   opacity: 0;
 }
