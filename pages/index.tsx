@@ -4,13 +4,19 @@ import ProductOverview from 'components/products/ProductOverview';
 import ProductItemModal from 'components/products/ProductItemModal';
 import PageWrapper from 'components/common/PageWrapper';
 import { useSpring, animated } from 'react-spring';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Home() {
   const animProps = useSpring({
     opacity: 1,
     from: { opacity: 0 },
-    delay: 250
+    delay: Cookies.get('onload') ? 0 : 750
   });
+
+  useEffect(() => {
+    Cookies.set('onload', 'true');
+  }, []);
 
   return (
     <animated.div style={animProps}>

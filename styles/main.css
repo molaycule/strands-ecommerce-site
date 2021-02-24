@@ -3304,6 +3304,11 @@ HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW
   background-color: #c56439;
 }
 
+.hov-btn4:hover {
+  background-color: #fff !important;
+  color: #c56439 !important;
+}
+
 /*---------------------------------------------*/
 
 .hov-img0 {
@@ -3342,8 +3347,8 @@ HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW HOW
 /*---------------------------------------------*/
 
 .hov-btn2:hover {
-  border-color: #fff;
-  background-color: #fff;
+  border-color: #fff !important;
+  background-color: #fff !important;
   color: #c56439;
 }
 

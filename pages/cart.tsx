@@ -9,14 +9,20 @@ const stateOptions = [
   { value: 'lag', label: 'Lagos' }
 ];
 
+interface CartItem extends CartItemProps {
+  id: number;
+}
+
 const cart = () => {
-  const items: Array<CartItemProps> = [
+  const items: Array<CartItem> = [
     {
+      id: 1,
       imageUrl: 'images/item-cart-04.jpg',
       itemName: 'Fresh Strawberries',
       price: '36.00'
     },
     {
+      id: 2,
       imageUrl: 'images/item-cart-05.jpg',
       itemName: 'Lightweight Jacket',
       price: '16.00'
@@ -57,6 +63,7 @@ const cart = () => {
                       </tr>
                       {items.map(item => (
                         <CartItem
+                          key={item.id}
                           imageUrl={item.imageUrl}
                           itemName={item.itemName}
                           price={item.price}

@@ -1,21 +1,28 @@
 import { Utils } from 'utils';
 import CartPanelItem, { CartPanelItemProps } from './CartPanelItem';
 
+interface CartPanelItem extends CartPanelItemProps {
+  id: number;
+}
+
 const CartPanel = () => {
-  const items: Array<CartPanelItemProps> = [
+  const items: Array<CartPanelItem> = [
     {
+      id: 1,
       imageUrl: 'images/item-cart-01.jpg',
       itemName: 'White Shirt Pleat',
       quantity: 1,
       price: '19.00'
     },
     {
+      id: 2,
       imageUrl: 'images/item-cart-02.jpg',
       itemName: 'Converse All Star',
       quantity: 1,
       price: '39.00'
     },
     {
+      id: 3,
       imageUrl: 'images/item-cart-03.jpg',
       itemName: 'Nixon Porter Leather',
       quantity: 1,
@@ -38,6 +45,7 @@ const CartPanel = () => {
           <ul className='header-cart-wrapitem w-full'>
             {items.map(item => (
               <CartPanelItem
+                key={item.id}
                 imageUrl={item.imageUrl}
                 itemName={item.itemName}
                 quantity={item.quantity}

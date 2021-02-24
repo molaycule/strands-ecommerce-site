@@ -1,4 +1,6 @@
 import type { AppProps /*, AppContext */ } from 'next/app';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -19,6 +21,12 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      Cookies.remove('onload');
+    };
+  });
+
   return <Component {...pageProps} />;
 }
 

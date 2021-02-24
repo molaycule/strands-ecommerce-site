@@ -8,6 +8,7 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import ScrollToTop from 'react-scroll-to-top';
 import routes from 'routes';
 import BackToTop from './BackToTop';
+import CookieConsent from 'react-cookie-consent';
 
 interface PageWrapperProps {
   isHomePage?: boolean;
@@ -89,6 +90,19 @@ const PageWrapper: FC<PageWrapperProps> = ({
       <CartPanel />
       <Footer />
       <ScrollToTop smooth component={<BackToTop scale={0.5} />} />
+      <CookieConsent
+        location='bottom'
+        buttonText='Accept'
+        debug={true}
+        buttonStyle={{
+          borderRadius: 23,
+          backgroundColor: '#c56439',
+          color: '#fff'
+        }}
+        buttonClasses='flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn4 p-lr-15 trans-04'>
+        By using our site you agree to our use of cookies to deliver a better
+        site experience.
+      </CookieConsent>
     </div>
   );
 };
