@@ -10,8 +10,8 @@ import Cookies from 'js-cookie';
 export default function Home() {
   const animProps = useSpring({
     opacity: 1,
-    from: { opacity: 0 },
-    delay: Cookies.get('onload') ? 0 : 750
+    from: { opacity: Cookies.get('onload') ? 1 : 0 },
+    delay: 750
   });
 
   useEffect(() => {
