@@ -6,16 +6,20 @@ import PageWrapper from 'components/common/PageWrapper';
 import { useSpring, animated } from 'react-spring';
 
 export default function Home() {
-  const animProps = useSpring({ opacity: 1, from: { opacity: 0 } });
+  const animProps = useSpring({
+    opacity: 1,
+    from: { opacity: 0 },
+    delay: 250
+  });
 
   return (
-    <PageWrapper isHomePage>
-      <animated.div style={animProps}>
+    <animated.div style={animProps}>
+      <PageWrapper isHomePage>
         <BannerSlide />
         <TopCategories />
         <ProductOverview />
         <ProductItemModal />
-      </animated.div>
-    </PageWrapper>
+      </PageWrapper>
+    </animated.div>
   );
 }
