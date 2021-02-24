@@ -25,6 +25,7 @@
     "react-scroll-to-top": "^1.0.5",
     "react-select": "^4.1.0",
     "react-slick": "^0.28.0",
+    "react-spring": "^8.0.27",
     "slick-carousel": "^1.8.1",
     "sweetalert": "^2.1.2"
   },
