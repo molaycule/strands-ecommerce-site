@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import Select from 'react-select';
 import swal from 'sweetalert';
 import Slider from 'react-slick';
+import { Utils } from 'utils';
 
 const ProductItemModal = () => {
   const sliderRef = useRef<Slider>(null);
@@ -31,15 +32,6 @@ const ProductItemModal = () => {
 
   const hideProductItemModalHandler = () => {
     document.querySelector('.js-modal1').classList.remove('show-modal1');
-  };
-
-  const incrementNumberOfProduct = () => {
-    setNumberOfProduct(state => state + 1);
-  };
-
-  const decrementNumberOfProduct = () => {
-    if (numberOfProduct < 1) return;
-    setNumberOfProduct(state => state - 1);
   };
 
   const addToCartHandler = () => {
@@ -142,7 +134,9 @@ const ProductItemModal = () => {
                       <div className='wrap-num-product flex-w m-r-20 m-tb-10'>
                         <div
                           className='btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m'
-                          onClick={decrementNumberOfProduct}>
+                          onClick={() =>
+                            Utils.decrementNumberOfProduct(setNumberOfProduct)
+                          }>
                           <i className='fs-16 zmdi zmdi-minus'></i>
                         </div>
                         <input
@@ -156,7 +150,9 @@ const ProductItemModal = () => {
                         />
                         <div
                           className='btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m'
-                          onClick={incrementNumberOfProduct}>
+                          onClick={() =>
+                            Utils.incrementNumberOfProduct(setNumberOfProduct)
+                          }>
                           <i className='fs-16 zmdi zmdi-plus'></i>
                         </div>
                       </div>

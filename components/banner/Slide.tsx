@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import { FC } from 'react';
+import routes from 'routes';
 
 export interface SlideProps {
   index: number;
@@ -21,11 +23,11 @@ const Slide: FC<SlideProps> = ({ index, title, subtitle }) => {
             </h2>
           </div>
           <div className='layer-slick1'>
-            <a
-              href='product.html'
-              className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04'>
-              Shop Now
-            </a>
+            <Link href={routes.products}>
+              <a className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04'>
+                Shop Now
+              </a>
+            </Link>
           </div>
         </div>
       </div>

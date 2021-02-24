@@ -1,6 +1,27 @@
 import { Utils } from 'utils';
+import CartPanelItem, { CartPanelItemProps } from './CartPanelItem';
 
 const CartPanel = () => {
+  const items: Array<CartPanelItemProps> = [
+    {
+      imageUrl: 'images/item-cart-01.jpg',
+      itemName: 'White Shirt Pleat',
+      quantity: 1,
+      price: '19.00'
+    },
+    {
+      imageUrl: 'images/item-cart-02.jpg',
+      itemName: 'Converse All Star',
+      quantity: 1,
+      price: '39.00'
+    },
+    {
+      imageUrl: 'images/item-cart-03.jpg',
+      itemName: 'Nixon Porter Leather',
+      quantity: 1,
+      price: '17.00'
+    }
+  ];
   return (
     <div className='wrap-header-cart js-panel-cart'>
       <div className='s-full js-hide-cart'></div>
@@ -15,49 +36,22 @@ const CartPanel = () => {
         </div>
         <div className='header-cart-content flex-w js-pscroll'>
           <ul className='header-cart-wrapitem w-full'>
-            <li className='header-cart-item flex-w flex-t m-b-12'>
-              <div className='header-cart-item-img'>
-                <img src='images/item-cart-01.jpg' alt='IMG' />
-              </div>
-              <div className='header-cart-item-txt p-t-8'>
-                <a
-                  href='#'
-                  className='header-cart-item-name m-b-18 hov-cl1 trans-04'>
-                  White Shirt Pleat
-                </a>
-                <span className='header-cart-item-info'>1 x $19.00</span>
-              </div>
-            </li>
-            <li className='header-cart-item flex-w flex-t m-b-12'>
-              <div className='header-cart-item-img'>
-                <img src='images/item-cart-02.jpg' alt='IMG' />
-              </div>
-              <div className='header-cart-item-txt p-t-8'>
-                <a
-                  href='#'
-                  className='header-cart-item-name m-b-18 hov-cl1 trans-04'>
-                  Converse All Star
-                </a>
-                <span className='header-cart-item-info'>1 x $39.00</span>
-              </div>
-            </li>
-            <li className='header-cart-item flex-w flex-t m-b-12'>
-              <div className='header-cart-item-img'>
-                <img src='images/item-cart-03.jpg' alt='IMG' />
-              </div>
-              <div className='header-cart-item-txt p-t-8'>
-                <a
-                  href='#'
-                  className='header-cart-item-name m-b-18 hov-cl1 trans-04'>
-                  Nixon Porter Leather
-                </a>
-                <span className='header-cart-item-info'>1 x $17.00</span>
-              </div>
-            </li>
+            {items.map(item => (
+              <CartPanelItem
+                imageUrl={item.imageUrl}
+                itemName={item.itemName}
+                quantity={item.quantity}
+                price={item.price}
+              />
+            ))}
           </ul>
           <div className='w-full'>
             <div className='header-cart-total w-full p-tb-40'>
-              Total: $75.00
+              Total: ₦
+              {items
+                .map(item => Number(item.price))
+                .reduce((acc, cur) => acc + cur)
+                .toFixed(2)}
             </div>
             <div className='header-cart-buttons flex-w w-full'>
               <a

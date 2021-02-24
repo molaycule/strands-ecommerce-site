@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export class Utils {
   static showCartPanelHandler = () => {
     const cartPanel = document.querySelector('.js-panel-cart');
@@ -67,5 +69,17 @@ export class Utils {
     } else {
       return Utils.slideUp(target, duration);
     }
+  };
+
+  static incrementNumberOfProduct = (
+    setNumberOfProduct: Dispatch<SetStateAction<number>>
+  ) => {
+    setNumberOfProduct((state: number) => state + 1);
+  };
+
+  static decrementNumberOfProduct = (
+    setNumberOfProduct: Dispatch<SetStateAction<number>>
+  ) => {
+    setNumberOfProduct((state: number) => (state < 1 ? state : state - 1));
   };
 }

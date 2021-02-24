@@ -35,6 +35,10 @@ const PageWrapper: FC<PageWrapperProps> = ({
         pageHeaderLink = PageHeaderLinks.Products;
         pageTitle = `${appName} | Products`;
         break;
+      case routes.cart:
+        pageHeaderLink = PageHeaderLinks.Cart;
+        pageTitle = `${appName} | Cart`;
+        break;
       case routes.about:
         pageHeaderLink = PageHeaderLinks.About;
         pageTitle = `${appName} | About`;

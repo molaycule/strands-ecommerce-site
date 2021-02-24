@@ -10,7 +10,7 @@ export enum ProductCategory {
 export enum PageHeaderLinks {
   Home,
   Products,
-  Feature,
+  Cart,
   About,
   Contact
 }

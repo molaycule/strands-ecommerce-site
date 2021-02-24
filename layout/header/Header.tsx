@@ -54,7 +54,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
   }, []);
 
   return (
-    <header className={!isHomePage && 'header-v4'}>
+    <header className={!isHomePage ? 'header-v4' : null}>
       <div className='container-menu-desktop' ref={headerDesktopRef}>
         <div className='top-bar' ref={topBarRef}>
           <div className='content-topbar flex-sb-m h-full container'>
@@ -72,13 +72,13 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 EN
               </a>
               <a href='#' className='flex-c-m trans-04 p-lr-25'>
-                USD
+                NGN
               </a>
             </div>
           </div>
         </div>
         <div
-          className={`wrap-menu-desktop ${!isHomePage && 'how-shadow1'}`}
+          className={`wrap-menu-desktop ${!isHomePage ? 'how-shadow1' : null}`}
           ref={wrapMenuRef}>
           <nav className='limiter-menu-desktop container'>
             <Link href={routes.home}>
@@ -91,7 +91,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
               <ul className='main-menu'>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.Home && 'active-menu'
+                    activeLink === PageHeaderLinks.Home ? 'active-menu' : null
                   }>
                   <Link href={routes.home}>
                     <a>Home</a>
@@ -99,7 +99,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 </li>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.Products && 'active-menu'
+                    activeLink === PageHeaderLinks.Products
+                      ? 'active-menu'
+                      : null
                   }>
                   <Link href={routes.products}>
                     <a>Products</a>
@@ -107,16 +109,15 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 </li>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.Feature
-                      ? 'active-menu label1'
-                      : 'label1'
-                  }
-                  data-label1='hot'>
-                  <a href='shoping-cart.html'>Features</a>
+                    activeLink === PageHeaderLinks.Cart ? 'active-menu' : null
+                  }>
+                  <Link href={routes.cart}>
+                    <a>Shopping Cart</a>
+                  </Link>
                 </li>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.About && 'active-menu'
+                    activeLink === PageHeaderLinks.About ? 'active-menu' : null
                   }>
                   <Link href={routes.about}>
                     <a>About</a>
@@ -124,7 +125,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 </li>
                 <li
                   className={
-                    activeLink === PageHeaderLinks.Contact && 'active-menu'
+                    activeLink === PageHeaderLinks.Contact
+                      ? 'active-menu'
+                      : null
                   }>
                   <Link href={routes.contact}>
                     <a>Contact</a>
@@ -154,9 +157,11 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
 
       <div className='wrap-header-mobile'>
         <div className='logo-mobile'>
-          <a href='index.html'>
-            <div className='img-logo-mobile' />
-          </a>
+          <Link href={routes.home}>
+            <a>
+              <div className='img-logo-mobile' />
+            </a>
+          </Link>
         </div>
 
         <div className='wrap-icon-header flex-w flex-r-m m-r-15'>
@@ -203,7 +208,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                 EN
               </a>
               <a href='#' className='flex-c-m p-lr-10 trans-04'>
-                USD
+                NGN
               </a>
             </div>
           </li>
@@ -220,12 +225,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
             </Link>
           </li>
           <li>
-            <a
-              href='shoping-cart.html'
-              className='label1 rs1'
-              data-label1='hot'>
-              Features
-            </a>
+            <Link href={routes.cart}>
+              <a>Shopping Cart</a>
+            </Link>
           </li>
           <li>
             <Link href={routes.about}>
