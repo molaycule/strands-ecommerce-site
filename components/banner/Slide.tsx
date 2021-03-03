@@ -3,13 +3,15 @@ import { FC } from 'react';
 import routes from 'routes';
 
 export interface SlideProps {
-  index: number;
   title: string;
   subtitle?: string;
+  imageUrl: string;
 }
-const Slide: FC<SlideProps> = ({ index, title, subtitle }) => {
+const Slide: FC<SlideProps> = ({ title, subtitle, imageUrl }) => {
   return (
-    <div className={`item-slick1 slide${index}`}>
+    <div
+      className={`item-slick1`}
+      style={{ backgroundImage: `url(${imageUrl})` }}>
       <div className='container h-full'>
         <div className='flex-col-l-m h-full p-t-100 p-b-30 respon5'>
           {subtitle && (

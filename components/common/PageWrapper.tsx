@@ -93,7 +93,6 @@ const PageWrapper: FC<PageWrapperProps> = ({
       <CookieConsent
         location='bottom'
         buttonText='Accept'
-        debug={true}
         buttonStyle={{
           borderRadius: 23,
           backgroundColor: '#c56439',

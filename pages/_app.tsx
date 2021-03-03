@@ -1,4 +1,5 @@
 import type { AppProps /*, AppContext */ } from 'next/app';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
@@ -20,6 +21,11 @@ Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+const client = new ApolloClient({
+  uri: 'http://localhost:5000/admin/api',
+  cache: new InMemoryCache()
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     window.onbeforeunload = () => {
@@ -27,7 +33,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   });
 
-  return <Component {...pageProps} />;
+  return (
+    <ApolloProvider client={client}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  );
 }
 
 export default MyApp;
