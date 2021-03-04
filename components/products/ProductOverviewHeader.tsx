@@ -1,8 +1,12 @@
 import { FC, LegacyRef, useState } from 'react';
-import { ProductCategory } from 'enums';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useQuery } from '@apollo/client';
+import { ALL_CATEGORIES } from 'graphql/queries';
+import { AllCategories } from 'types';
 
 interface ProductOverviewHeaderProps {
-  productFilterHandler: (filterCategory: ProductCategory) => void;
+  productFilterHandler: (filterCategory: string) => void;
   showFilterRef?: LegacyRef<HTMLDivElement>;
   showFilterHandler?: () => void;
   showSearchRef?: LegacyRef<HTMLDivElement>;
@@ -16,60 +20,49 @@ const ProductOverviewHeader: FC<ProductOverviewHeaderProps> = ({
   showSearchRef,
   showSearchHandler
 }) => {
-  const [activeCategory, setActiveCategory] = useState(ProductCategory.All);
+  const router = useRouter();
+  const { data } = useQuery<AllCategories>(ALL_CATEGORIES);
+  const [activeCategory, setActiveCategory] = useState<string>(null);
 
-  const activeCategoryAndFilterHandler = (category: ProductCategory) => {
-    setActiveCategory(category);
-    productFilterHandler(category);
+  const activeCategoryAndFilterHandler = (categoryName: string) => {
+    setActiveCategory(categoryName);
+    productFilterHandler(categoryName);
   };
 
   return (
     <>
       <div className='flex-w flex-l-m filter-tope-group m-tb-10'>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.All && 'how-active1'
-          }`}
-          onClick={() => activeCategoryAndFilterHandler(ProductCategory.All)}>
-          All Products
-        </button>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.Women && 'how-active1'
-          }`}
-          onClick={() => activeCategoryAndFilterHandler(ProductCategory.Women)}>
-          Women
-        </button>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.Men && 'how-active1'
-          }`}
-          onClick={() => activeCategoryAndFilterHandler(ProductCategory.Men)}>
-          Men
-        </button>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.Bag && 'how-active1'
-          }`}
-          onClick={() => activeCategoryAndFilterHandler(ProductCategory.Bag)}>
-          Bag
-        </button>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.Shoes && 'how-active1'
-          }`}
-          onClick={() => activeCategoryAndFilterHandler(ProductCategory.Shoes)}>
-          Shoes
-        </button>
-        <button
-          className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-            activeCategory === ProductCategory.Watches && 'how-active1'
-          }`}
-          onClick={() =>
-            activeCategoryAndFilterHandler(ProductCategory.Watches)
-          }>
-          Watches
-        </button>
+        <Link
+          href={{
+            pathname: router.pathname,
+            query: { category: 'all' }
+          }}
+          shallow>
+          <a
+            className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
+              activeCategory === null && 'how-active1'
+            }`}
+            onClick={() => activeCategoryAndFilterHandler(null)}>
+            All Products
+          </a>
+        </Link>
+        {data?.allCategories.map(category => (
+          <Link
+            key={category.id}
+            href={{
+              pathname: router.pathname,
+              query: { category: category.name.toLowerCase() }
+            }}
+            shallow>
+            <a
+              className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
+                activeCategory === category.name && 'how-active1'
+              }`}
+              onClick={() => activeCategoryAndFilterHandler(category.name)}>
+              {category.name}
+            </a>
+          </Link>
+        ))}
       </div>
       {(showFilterRef || showSearchRef) && (
         <div className='flex-w flex-c-m m-tb-10'>

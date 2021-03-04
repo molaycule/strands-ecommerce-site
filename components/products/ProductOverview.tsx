@@ -8,7 +8,7 @@ import ProductSearch from './ProductSearch';
 
 export interface ProductItem extends ProductItemProps {
   id: number;
-  category: ProductCategory;
+  category: string;
 }
 
 interface ProductOverviewProps {
@@ -24,126 +24,124 @@ const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
     {
       id: 1,
       name: 'Esprit Ruffle Shirt',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '16.64',
       imageUrl: 'images/product-01.jpg'
     },
     {
       id: 2,
       name: 'Herschel supply',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '35.31',
       imageUrl: 'images/product-02.jpg'
     },
     {
       id: 3,
       name: 'Only Check Trouser',
-      category: ProductCategory.Men,
+      category: 'Men',
       price: '25.50',
       imageUrl: 'images/product-03.jpg'
     },
     {
       id: 4,
       name: 'Classic Trench Coat',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '75.00',
       imageUrl: 'images/product-04.jpg'
     },
     {
       id: 5,
       name: 'Front Pocket Jumper',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '34.75',
       imageUrl: 'images/product-05.jpg'
     },
     {
       id: 6,
       name: 'Vintage Inspired Classic',
-      category: ProductCategory.Watches,
+      category: 'Watches',
       price: '93.20',
       imageUrl: 'images/product-06.jpg'
     },
     {
       id: 7,
       name: 'Shirt in Stretch Cotton',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '52.66',
       imageUrl: 'images/product-07.jpg'
     },
     {
       id: 8,
       name: 'Pieces Metallic Printed',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '18.96',
       imageUrl: 'images/product-08.jpg'
     },
     {
       id: 9,
       name: 'Converse All Star Hi Plimsolls',
-      category: ProductCategory.Shoes,
+      category: 'Shoes',
       price: '75.00',
       imageUrl: 'images/product-09.jpg'
     },
     {
       id: 10,
       name: 'Femme T-Shirt In Stripe',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '25.85',
       imageUrl: 'images/product-10.jpg'
     },
     {
       id: 11,
       name: 'Herschel supply',
-      category: ProductCategory.Men,
+      category: 'Men',
       price: '63.16',
       imageUrl: 'images/product-11.jpg'
     },
     {
       id: 12,
       name: 'Herschel supply',
-      category: ProductCategory.Men,
+      category: 'Men',
       price: '63.16',
       imageUrl: 'images/product-12.jpg'
     },
     {
       id: 13,
       name: 'T-Shirt with Sleeve',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '18.49',
       imageUrl: 'images/product-13.jpg'
     },
     {
       id: 14,
       name: 'Pretty Little Thing',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '54.79',
       imageUrl: 'images/product-14.jpg'
     },
     {
       id: 15,
       name: 'Mini Silver Mesh Watch',
-      category: ProductCategory.Watches,
+      category: 'Watches',
       price: '86.85',
       imageUrl: 'images/product-15.jpg'
     },
     {
       id: 16,
       name: 'Square Neck Back',
-      category: ProductCategory.Women,
+      category: 'Women',
       price: '29.64',
       imageUrl: 'images/product-16.jpg'
     }
   ];
   const [filteredProducts, setFilteredProducts] = useState(productItems);
 
-  const productFilterHandler = (filterCategory: ProductCategory) => {
+  const productFilterHandler = (filterCategory: string) => {
     if (!productItems) return;
 
     setFilteredProducts(
       productItems.filter(item =>
-        filterCategory === ProductCategory.All
-          ? true
-          : item.category === filterCategory
+        filterCategory === null ? true : item.category === filterCategory
       )
     );
   };

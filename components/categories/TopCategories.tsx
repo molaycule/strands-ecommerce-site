@@ -1,35 +1,31 @@
-import Category, { CategoryProps } from './Category';
+import { useQuery } from '@apollo/client';
+import { TOP_CATEGORIES } from 'graphql/queries';
+import Category from './Category';
+import { AllTopCategories } from 'types';
+import { Fragment } from 'react';
 
 const TopCategories = () => {
-  const categories: Array<CategoryProps> = [
-    {
-      title: 'Women',
-      subtitle: 'Spring 2018',
-      imageUrl: 'images/banner-01.jpg'
-    },
-    {
-      title: 'Men',
-      subtitle: 'Spring 2018',
-      imageUrl: 'images/banner-02.jpg'
-    },
-    {
-      title: 'Accessories',
-      subtitle: 'New Trend',
-      imageUrl: 'images/banner-03.jpg'
-    }
-  ];
+  const { data } = useQuery<AllTopCategories>(TOP_CATEGORIES);
 
   return (
     <div className='sec-banner bg0 p-t-80 p-b-50'>
       <div className='container'>
         <div className='row'>
-          {categories.map((category, index) => (
-            <Category
-              key={index}
-              title={category.title}
-              subtitle={category.subtitle}
-              imageUrl={category.imageUrl}
-            />
+          {data?.allTopCategories.map(item => (
+            <Fragment key={item.id}>
+              <Category
+                title={item.category1.name}
+                imageUrl={item.category1Image.publicUrl}
+              />
+              <Category
+                title={item.category2.name}
+                imageUrl={item.category2Image.publicUrl}
+              />
+              <Category
+                title={item.category3.name}
+                imageUrl={item.category3Image.publicUrl}
+              />
+            </Fragment>
           ))}
         </div>
       </div>

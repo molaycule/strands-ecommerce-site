@@ -11,7 +11,7 @@ const sliderSettings = {
   fade: true,
   autoplay: true,
   autoplaySpeed: 6000,
-  arrows: true,
+  arrows: false,
   pauseOnFocus: false,
   pauseOnHover: false,
   slidesToShow: 1,

@@ -2,11 +2,12 @@ import Link from 'next/link';
 import { FC } from 'react';
 import routes from 'routes';
 
-export interface SlideProps {
+interface SlideProps {
   title: string;
   subtitle?: string;
   imageUrl: string;
 }
+
 const Slide: FC<SlideProps> = ({ title, subtitle, imageUrl }) => {
   return (
     <div
