@@ -1,10 +1,16 @@
-import { FC, LegacyRef } from 'react';
+import { Dispatch, SetStateAction, FC, LegacyRef } from 'react';
 
 interface ProductSearchProps {
   panelSearchRef?: LegacyRef<HTMLDivElement>;
+  searchProduct: string;
+  setSearchProduct: Dispatch<SetStateAction<string>>;
 }
 
-const ProductSearch: FC<ProductSearchProps> = ({ panelSearchRef }) => {
+const ProductSearch: FC<ProductSearchProps> = ({
+  panelSearchRef,
+  searchProduct,
+  setSearchProduct
+}) => {
   if (!panelSearchRef) return null;
 
   return (
@@ -20,6 +26,8 @@ const ProductSearch: FC<ProductSearchProps> = ({ panelSearchRef }) => {
           type='text'
           name='search-product'
           placeholder='Search'
+          value={searchProduct}
+          onChange={e => setSearchProduct(e.target.value)}
         />
       </div>
     </div>

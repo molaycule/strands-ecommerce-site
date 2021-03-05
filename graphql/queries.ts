@@ -47,3 +47,42 @@ export const TOP_CATEGORIES = gql`
     }
   }
 `;
+
+export const ALL_PRODUCTS = gql`
+  query AllProduct(
+    $categoryName: String
+    $sortBy: [SortProductsBy!]
+    $search: String
+    $skip: Int
+    $first: Int
+  ) {
+    _allProductsMeta(
+      where: { isAvailable: true, category: { name_contains: $categoryName } }
+      sortBy: $sortBy
+      search: $search
+    ) {
+      count
+    }
+    allProducts(
+      where: { isAvailable: true, category: { name_contains: $categoryName } }
+      sortBy: $sortBy
+      search: $search
+      skip: $skip
+      first: $first
+    ) {
+      id
+      name
+      description
+      price
+      category {
+        name
+      }
+      mainImage {
+        publicUrl
+      }
+      otherImage {
+        publicUrl
+      }
+    }
+  }
+`;

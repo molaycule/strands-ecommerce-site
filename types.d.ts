@@ -39,3 +39,24 @@ export type AllTopCategories = {
     };
   }[];
 };
+
+export type AllProducts = {
+  _allProductsMeta: {
+    count: number;
+  };
+  allProducts: {
+    id: string;
+    name: string;
+    description: string;
+    price: float;
+    category: {
+      name: string;
+    };
+    mainImage: {
+      publicUrl: string;
+    };
+    otherImage: {
+      publicUrl: string;
+    };
+  }[];
+};
