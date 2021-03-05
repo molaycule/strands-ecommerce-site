@@ -6,7 +6,7 @@ import ProductItem, { ProductItemProps } from './ProductItem';
 import ProductOverviewHeader from './ProductOverviewHeader';
 import ProductSearch from './ProductSearch';
 import { ALL_PRODUCTS } from 'graphql/queries';
-import { AllProducts } from 'types';
+import { AllProducts, Product } from 'types';
 
 export interface ProductItem extends ProductItemProps {
   id: number;
@@ -22,9 +22,9 @@ const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
   const panelSearchRef = useRef<HTMLDivElement>(null);
   const showFilterRef = useRef<HTMLDivElement>(null);
   const panelFilterRef = useRef<HTMLDivElement>(null);
-  const [searchProduct, setSearchProduct] = useState<string>(null);
+  const [searchProduct, setSearchProduct] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const { data } = useQuery<AllProducts>(ALL_PRODUCTS, {
     variables: { search: searchProduct, categoryName: activeCategory }
   });
@@ -85,12 +85,7 @@ const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
         </div>
         <div className='row'>
           {filteredProducts.map(product => (
-            <ProductItem
-              key={product.id}
-              name={product.name}
-              price={product.price.toFixed(2)}
-              imageUrl={product.mainImage.publicUrl}
-            />
+            <ProductItem key={product.id} product={product} />
           ))}
         </div>
         <div className='flex-c-m flex-w w-full p-t-45'>

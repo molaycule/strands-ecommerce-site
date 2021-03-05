@@ -83,6 +83,9 @@ export const ALL_PRODUCTS = gql`
       otherImage {
         publicUrl
       }
+      facebookLink
+      instagramLink
+      twitterLink
     }
   }
 `;

@@ -2142,9 +2142,17 @@ input.num-product::-webkit-inner-spin-button {
   width: 30px;
 }
 
-.btn-addwish-b2 .icon-heart2 {
+[data-active-wishlist="1"] {
+  opacity: 1;
+}
+
+[data-active-wishlist="0"] {
   opacity: 0;
 }
+
+/* .btn-addwish-b2 .icon-heart2 {
+  opacity: 0;
+} */
 
 .btn-addwish-b2:hover .icon-heart2 {
   opacity: 1;

@@ -40,23 +40,28 @@ export type AllTopCategories = {
   }[];
 };
 
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: float;
+  category: {
+    name: string;
+  };
+  mainImage: {
+    publicUrl: string;
+  };
+  otherImage: {
+    publicUrl: string;
+  };
+  facebookLink: string;
+  instagramLink: string;
+  twitterLink: string;
+};
+
 export type AllProducts = {
   _allProductsMeta: {
     count: number;
   };
-  allProducts: {
-    id: string;
-    name: string;
-    description: string;
-    price: float;
-    category: {
-      name: string;
-    };
-    mainImage: {
-      publicUrl: string;
-    };
-    otherImage: {
-      publicUrl: string;
-    };
-  }[];
+  allProducts: Product[];
 };

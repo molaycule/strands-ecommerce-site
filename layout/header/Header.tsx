@@ -3,6 +3,7 @@ import { Utils } from 'utils';
 import Link from 'next/link';
 import routes from 'routes';
 import { PageHeaderLinks } from 'enums';
+import { useWishlistStore } from 'store/useWishlistStore';
 
 interface HeaderProps {
   isHomePage: boolean;
@@ -16,6 +17,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const showCartRef = useRef<HTMLDivElement>(null);
+  const wishlist = useWishlistStore(state => state.wishlist);
 
   const scrollHandler = () => {
     if (!topBarRef?.current?.clientHeight) return;
@@ -147,7 +149,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
               <a
                 href='#'
                 className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti'
-                data-notify='0'>
+                data-notify={wishlist.length > 9 ? '9+' : wishlist.length}>
                 <i className='zmdi zmdi-favorite-outline'></i>
               </a>
             </div>
@@ -174,7 +176,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
           <a
             href='#'
             className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti'
-            data-notify='0'>
+            data-notify={wishlist.length > 9 ? '9+' : wishlist.length}>
             <i className='zmdi zmdi-favorite-outline'></i>
           </a>
         </div>

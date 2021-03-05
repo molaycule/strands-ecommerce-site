@@ -1,7 +1,7 @@
+import dynamic from 'next/dynamic';
 import CartPanel from 'components/cart/CartPanel';
 import { PageHeaderLinks } from 'enums';
 import Footer from 'layout/footer/Footer';
-import Header from 'layout/header/Header';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import { FC, ReactNode, useEffect, useState } from 'react';
@@ -9,6 +9,8 @@ import ScrollToTop from 'react-scroll-to-top';
 import routes from 'routes';
 import BackToTop from './BackToTop';
 import CookieConsent from 'react-cookie-consent';
+
+const Header = dynamic(() => import('layout/header/Header'), { ssr: false });
 
 interface PageWrapperProps {
   isHomePage?: boolean;
