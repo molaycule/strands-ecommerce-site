@@ -72,9 +72,6 @@ const Header: FC<HeaderProps> = ({
                 Help & FAQs
               </a>
               <a href='#' className='flex-c-m trans-04 p-lr-25'>
-                My Account
-              </a>
-              <a href='#' className='flex-c-m trans-04 p-lr-25'>
                 EN
               </a>
               <a href='#' className='flex-c-m trans-04 p-lr-25'>
@@ -219,9 +216,6 @@ const Header: FC<HeaderProps> = ({
             <div className='right-top-bar flex-w h-full'>
               <a href='#' className='flex-c-m p-lr-10 trans-04'>
                 Help & FAQs
-              </a>
-              <a href='#' className='flex-c-m p-lr-10 trans-04'>
-                My Account
               </a>
               <a href='#' className='flex-c-m p-lr-10 trans-04'>
                 EN
