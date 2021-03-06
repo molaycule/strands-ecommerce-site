@@ -35,7 +35,7 @@ const ProductOverviewHeader: FC<ProductOverviewHeaderProps> = ({
         <Link
           href={{
             pathname: router.pathname,
-            query: { category: 'all' }
+            query: { ...router.query, category: 'all' }
           }}
           shallow>
           <a
@@ -51,7 +51,7 @@ const ProductOverviewHeader: FC<ProductOverviewHeaderProps> = ({
             key={category.id}
             href={{
               pathname: router.pathname,
-              query: { category: category.name.toLowerCase() }
+              query: { ...router.query, category: category.name.toLowerCase() }
             }}
             shallow>
             <a

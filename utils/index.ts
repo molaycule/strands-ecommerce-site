@@ -1,10 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export class Utils {
-  static showCartPanelHandler = () => {
+  static toggleCartPanelHandler = () => {
     const cartPanel = document.querySelector('.js-panel-cart');
     if (!cartPanel) return;
     cartPanel.classList.toggle('show-header-cart');
+  };
+
+  static toggleWishlistPanelHandler = () => {
+    const wishlistPanel = document.querySelector('.js-panel-wishlist');
+    if (!wishlistPanel) return;
+    wishlistPanel.classList.toggle('show-header-wishlist');
   };
 
   static slideUp = (target: HTMLElement, duration: number) => {

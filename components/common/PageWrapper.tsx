@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import CartPanel from 'components/cart/CartPanel';
 import { PageHeaderLinks } from 'enums';
-import Footer from 'layout/footer/Footer';
+import Footer from 'layout/Footer';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import { FC, ReactNode, useEffect, useState } from 'react';
@@ -10,7 +10,11 @@ import routes from 'routes';
 import BackToTop from './BackToTop';
 import CookieConsent from 'react-cookie-consent';
 
-const Header = dynamic(() => import('layout/header/Header'), { ssr: false });
+const Header = dynamic(() => import('layout/Header'), { ssr: false });
+const WishlistPanel = dynamic(
+  () => import('components/wishlist/WishlistPanel'),
+  { ssr: false }
+);
 
 interface PageWrapperProps {
   isHomePage?: boolean;
@@ -90,6 +94,7 @@ const PageWrapper: FC<PageWrapperProps> = ({
       <Header isHomePage={isHomePage} activeLink={activeLink} />
       {children}
       <CartPanel />
+      <WishlistPanel />
       <Footer />
       <ScrollToTop smooth component={<BackToTop scale={0.5} />} />
       <CookieConsent

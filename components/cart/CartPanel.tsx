@@ -37,7 +37,7 @@ const CartPanel = () => {
           <span className='mtext-103 cl2'>Your Cart</span>
           <div
             className='fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart'
-            onClick={Utils.showCartPanelHandler}>
+            onClick={Utils.toggleCartPanelHandler}>
             <i className='zmdi zmdi-close'></i>
           </div>
         </div>
@@ -58,7 +58,7 @@ const CartPanel = () => {
               Total: ₦
               {items
                 .map(item => Number(item.price))
-                .reduce((acc, cur) => acc + cur)
+                .reduce((acc, cur) => acc + cur, 0)
                 .toFixed(2)}
             </div>
             <div className='header-cart-buttons flex-w w-full'>

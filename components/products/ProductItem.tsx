@@ -41,7 +41,7 @@ const ProductItem: FC<ProductItemProps> = ({ product }) => {
           <img src={product.mainImage.publicUrl} alt='IMG-PRODUCT' />
           <a
             onClick={e => showProductItemModalHandler(e)}
-            className='block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1 cur-pointer'>
+            className='block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1 pointer'>
             Quick View
           </a>
         </div>
@@ -57,7 +57,7 @@ const ProductItem: FC<ProductItemProps> = ({ product }) => {
           <div className='block2-txt-child2 flex-r p-t-3'>
             <a
               onClick={wishlistHandler}
-              className='btn-addwish-b2 dis-block pos-relative js-addwish-b2 cur-pointer'>
+              className='btn-addwish-b2 dis-block pos-relative js-addwish-b2 pointer'>
               <img
                 className='icon-heart1 dis-block trans-04'
                 src='images/icons/icon-heart-01.png'

@@ -15,7 +15,7 @@ export default function Home() {
   });
 
   useEffect(() => {
-    Cookies.set('onload', 'true');
+    Cookies.set('onload', 'true', { sameSite: 'strict' });
   }, []);
 
   return (
