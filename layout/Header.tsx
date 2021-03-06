@@ -11,10 +11,7 @@ interface HeaderProps {
   activeLink: PageHeaderLinks;
 }
 
-const Header: FC<HeaderProps> = ({
-  isHomePage,
-  activeLink
-}) => {
+const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
   const router = useRouter();
   const headerDesktopRef = useRef<HTMLDivElement>(null);
   const wrapMenuRef = useRef<HTMLDivElement>(null);
@@ -65,7 +62,7 @@ const Header: FC<HeaderProps> = ({
         <div className='top-bar' ref={topBarRef}>
           <div className='content-topbar flex-sb-m h-full container'>
             <div className='left-top-bar'>
-              Free shipping for standard order over $100
+              Free shipping for standard order over ₦5,000
             </div>
             <div className='right-top-bar flex-w h-full'>
               <a href='#' className='flex-c-m trans-04 p-lr-25'>
@@ -209,7 +206,7 @@ const Header: FC<HeaderProps> = ({
         <ul className='topbar-mobile'>
           <li>
             <div className='left-top-bar'>
-              Free shipping for standard order over $100
+              Free shipping for standard order over ₦5,000
             </div>
           </li>
           <li>
