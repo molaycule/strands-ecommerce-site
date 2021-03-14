@@ -65,3 +65,13 @@ export type AllProducts = {
   };
   allProducts: Product[];
 };
+
+export type ProductRepositoryKey = {
+  category: string;
+  search: string;
+};
+
+export type ProductRepository = {
+  products: Map<string, Product>;
+  total: number;
+};

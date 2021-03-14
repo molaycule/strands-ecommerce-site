@@ -14,3 +14,14 @@ export enum PageHeaderLinks {
   About,
   Contact
 }
+
+export enum SortProductsBy {
+  name_ASC,
+  name_DESC,
+  price_ASC,
+  price_DESC,
+  updatedAt_ASC,
+  updatedAt_DESC,
+  createdAt_ASC,
+  createdAt_DESC
+}

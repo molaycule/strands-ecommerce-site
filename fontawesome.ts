@@ -4,12 +4,17 @@ import {
   faInstagramSquare,
   faTwitter
 } from '@fortawesome/free-brands-svg-icons';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+  faAngleRight,
+  faSpinner
+} from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   faFacebook,
   faTwitter,
   faInstagramSquare,
   faAngleLeft,
-  faAngleRight
+  faAngleRight,
+  faSpinner
 );

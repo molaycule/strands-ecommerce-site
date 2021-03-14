@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
-import Select from 'react-select';
+// import Select from 'react-select';
 import swal from 'sweetalert';
 import Slider from 'react-slick';
 import { Utils } from 'utils';

@@ -23,7 +23,20 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/admin/api',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          allProducts: {
+            keyArgs: ['where', 'search'],
+            merge(existing = [], incoming) {
+              return [...existing, ...incoming];
+            }
+          }
+        }
+      }
+    }
+  }),
   connectToDevTools: process.env.NODE_ENV === 'development' ? true : false
 });
 

@@ -1,4 +1,4 @@
-import { FC, LegacyRef, useState } from 'react';
+import { FC, LegacyRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
@@ -25,9 +25,18 @@ const ProductOverviewHeader: FC<ProductOverviewHeaderProps> = ({
   const [activeCategory, setActiveCategory] = useState<string>(null);
 
   const activeCategoryAndFilterHandler = (categoryName: string) => {
-    setActiveCategory(categoryName);
+    setActiveCategory(categoryName?.toLowerCase());
     productFilterHandler(categoryName);
   };
+
+  useEffect(() => {
+    if (router.query['category']) {
+      const categoryName = router.query['category'].toString().toLowerCase();
+      setActiveCategory(categoryName !== 'all' ? categoryName : null);
+    } else {
+      setActiveCategory(null);
+    }
+  }, [router.query]);
 
   return (
     <>
@@ -56,7 +65,7 @@ const ProductOverviewHeader: FC<ProductOverviewHeaderProps> = ({
             shallow>
             <a
               className={`stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 ${
-                activeCategory === category.name && 'how-active1'
+                activeCategory === category.name.toLowerCase() && 'how-active1'
               }`}
               onClick={() => activeCategoryAndFilterHandler(category.name)}>
               {category.name}
