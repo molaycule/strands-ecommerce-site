@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export class Utils {
+  static isServer = typeof window === 'undefined';
+  
   static toggleCartPanelHandler = () => {
     const cartPanel = document.querySelector('.js-panel-cart');
     if (!cartPanel) return;

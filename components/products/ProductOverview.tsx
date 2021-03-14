@@ -59,7 +59,7 @@ const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
   };
 
   const showSearchHandler = () => {
-    if (!showFilterRef.current) return;
+    if (!panelSearchRef.current) return;
     showSearchRef.current.classList.toggle('show-search');
     Utils.slideToggle(panelSearchRef.current, 400);
   };
