@@ -4,10 +4,12 @@ import { useRef, useState } from 'react';
 // import Select from 'react-select';
 import swal from 'sweetalert';
 import Slider from 'react-slick';
-import { Utils } from 'utils';
 import { useProductStore } from 'store/useProductStore';
 import { useCartStore } from 'store/useCartStore';
 import { useWishlistStore } from 'store/useWishlistStore';
+import ProductQuantitySetter from 'components/common/ProductQuantitySetter';
+import useIsProductInCart from 'hooks/useIsProductInCart';
+import useIsProductInWishlist from 'hooks/useIsProductInWishlist';
 
 const sliderSettings = {
   slidesToShow: 1,
@@ -21,7 +23,6 @@ const sliderSettings = {
 
 const ProductItemModal = () => {
   const product = useProductStore(state => state.product);
-  const wishlist = useWishlistStore(state => state.wishlist);
   const addToWishlistHandler = useWishlistStore(
     state => state.addToWishlistHandler
   );
@@ -34,19 +35,9 @@ const ProductItemModal = () => {
     state => state.removeFromCartHandler
   );
   const sliderRef = useRef<Slider>(null);
+  const isProductInCart = useIsProductInCart();
+  const isProductInWishlist = useIsProductInWishlist();
   const [numberOfProduct, setNumberOfProduct] = useState(1);
-
-  const isProductInWishlist = useMemo(() => {
-    if (Utils.isServer || !wishlist || !product) return false;
-
-    return wishlist.some(item => item.id === product.id);
-  }, [wishlist, product]);
-
-  const isProductInCart = useMemo(() => {
-    if (Utils.isServer || !cart || !product) return false;
-
-    return cart.some(item => item.product.id === product.id);
-  }, [cart, product]);
 
   const hideProductItemModalHandler = () => {
     document.querySelector('.js-modal1').classList.remove('show-modal1');
@@ -76,22 +67,6 @@ const ProductItemModal = () => {
       addToWishlistHandler(product);
       swal(product.name, 'is added to wishlist !', 'success');
     }
-  };
-
-  const decrementNumberOfProductHandler = () => {
-    if (numberOfProduct === 1) return;
-
-    if (isProductInCart) {
-      addToCartHandler(product, numberOfProduct - 1);
-    }
-    Utils.decrementNumberOfProduct(setNumberOfProduct);
-  };
-
-  const incrementNumberOfProductHandler = () => {
-    if (isProductInCart) {
-      addToCartHandler(product, numberOfProduct + 1);
-    }
-    Utils.incrementNumberOfProduct(setNumberOfProduct);
   };
 
   useEffect(() => {
@@ -197,23 +172,11 @@ const ProductItemModal = () => {
                       <div className='flex-w flex-r-s p-b-10'>
                         <div className='size-204 flex-w flex-m respon6-next'>
                           <div className='wrap-num-product flex-w m-r-20 m-tb-10'>
-                            <div
-                              className='btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m'
-                              onClick={decrementNumberOfProductHandler}>
-                              <i className='fs-16 zmdi zmdi-minus'></i>
-                            </div>
-                            <input
-                              className='mtext-104 cl3 txt-center num-product'
-                              type='number'
-                              name='num-product'
-                              disabled
-                              value={numberOfProduct}
+                            <ProductQuantitySetter
+                              numberOfProduct={numberOfProduct}
+                              setNumberOfProduct={setNumberOfProduct}
+                              isProductInCart={isProductInCart}
                             />
-                            <div
-                              className='btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m'
-                              onClick={incrementNumberOfProductHandler}>
-                              <i className='fs-16 zmdi zmdi-plus'></i>
-                            </div>
                           </div>
                           <button
                             className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail'

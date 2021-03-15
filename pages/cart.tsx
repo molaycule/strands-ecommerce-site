@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CartItem, { CartItemProps } from 'components/cart/CartItem';
+import dynamic from 'next/dynamic';
 import PageWrapper from 'components/common/PageWrapper';
 import Select from 'react-select';
+import { useCartStore } from 'store/useCartStore';
+
+const CartItem = dynamic(() => import('components/cart/CartItem'), { ssr: false });
 
 const countryOptions = [{ value: 'ng', label: 'Nigeria' }];
 const stateOptions = [
@@ -9,25 +12,8 @@ const stateOptions = [
   { value: 'lag', label: 'Lagos' }
 ];
 
-interface CartItem extends CartItemProps {
-  id: number;
-}
-
 const cart = () => {
-  const items: Array<CartItem> = [
-    {
-      id: 1,
-      imageUrl: 'images/item-cart-04.jpg',
-      itemName: 'Fresh Strawberries',
-      price: '36.00'
-    },
-    {
-      id: 2,
-      imageUrl: 'images/item-cart-05.jpg',
-      itemName: 'Lightweight Jacket',
-      price: '16.00'
-    }
-  ];
+  const cart = useCartStore(state => state.cart);
 
   return (
     <PageWrapper>
@@ -45,7 +31,6 @@ const cart = () => {
           <span className='stext-109 cl4'>Shoping Cart</span>
         </div>
       </div>
-
       <form className='bg0 p-t-75 p-b-85'>
         <div className='container'>
           <div className='row'>
@@ -61,14 +46,18 @@ const cart = () => {
                         <th className='column-4'>Quantity</th>
                         <th className='column-5'>Total</th>
                       </tr>
-                      {items.map(item => (
-                        <CartItem
-                          key={item.id}
-                          imageUrl={item.imageUrl}
-                          itemName={item.itemName}
-                          price={item.price}
-                        />
-                      ))}
+                      {cart.length ? (
+                        cart.map(item => (
+                          <CartItem
+                            key={item.product.id}
+                            imageUrl={item.product.mainImage.publicUrl}
+                            itemName={item.product.name}
+                            price={item.product.price}
+                          />
+                        ))
+                      ) : (
+                        <div>Cart is Empty...</div>
+                      )}
                     </tbody>
                   </table>
                 </div>
