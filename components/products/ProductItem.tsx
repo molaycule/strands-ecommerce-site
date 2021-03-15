@@ -1,7 +1,6 @@
 import { FC, MouseEvent } from 'react';
 import { useProductStore } from 'store/useProductStore';
 import { useWishlistStore } from 'store/useWishlistStore';
-import state from 'sweetalert/typings/modules/state';
 import { Product } from 'types';
 
 export interface ProductItemProps {

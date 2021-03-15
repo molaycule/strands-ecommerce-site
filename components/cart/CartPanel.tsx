@@ -1,34 +1,14 @@
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Utils } from 'utils';
-import CartPanelItem, { CartPanelItemProps } from './CartPanelItem';
+import { useCartStore } from 'store/useCartStore';
+import routes from 'routes';
 
-interface CartPanelItem extends CartPanelItemProps {
-  id: number;
-}
+const CartPanelItem = dynamic(() => import('./CartPanelItem'), { ssr: false });
 
 const CartPanel = () => {
-  const items: Array<CartPanelItem> = [
-    {
-      id: 1,
-      imageUrl: 'images/item-cart-01.jpg',
-      itemName: 'White Shirt Pleat',
-      quantity: 1,
-      price: '19.00'
-    },
-    {
-      id: 2,
-      imageUrl: 'images/item-cart-02.jpg',
-      itemName: 'Converse All Star',
-      quantity: 1,
-      price: '39.00'
-    },
-    {
-      id: 3,
-      imageUrl: 'images/item-cart-03.jpg',
-      itemName: 'Nixon Porter Leather',
-      quantity: 1,
-      price: '17.00'
-    }
-  ];
+  const cart = useCartStore(state => state.cart);
+
   return (
     <div className='wrap-header-cart js-panel-cart'>
       <div className='s-full js-hide-cart'></div>
@@ -42,31 +22,39 @@ const CartPanel = () => {
           </div>
         </div>
         <div className='header-cart-content flex-w js-pscroll'>
-          <ul className='header-cart-wrapitem w-full'>
-            {items.map(item => (
-              <CartPanelItem
-                key={item.id}
-                imageUrl={item.imageUrl}
-                itemName={item.itemName}
-                quantity={item.quantity}
-                price={item.price}
-              />
-            ))}
-          </ul>
+          {cart.length ? (
+            <ul className='header-cart-wrapitem w-full'>
+              {cart.map(item => (
+                <CartPanelItem
+                  key={item.product.id}
+                  productId={item.product.id}
+                  imageUrl={item.product.mainImage.publicUrl}
+                  itemName={item.product.name}
+                  quantity={item.quantity}
+                  price={item.product.price}
+                />
+              ))}
+            </ul>
+          ) : (
+            <div>Cart is Empty...</div>
+          )}
           <div className='w-full'>
             <div className='header-cart-total w-full p-tb-40'>
               Total: ₦
-              {items
-                .map(item => Number(item.price))
-                .reduce((acc, cur) => acc + cur, 0)
+              {cart
+                .map(item => ({
+                  price: Number(item.product.price),
+                  quantity: Number(item.quantity)
+                }))
+                .reduce((acc, cur) => acc + cur.price * cur.quantity, 0)
                 .toFixed(2)}
             </div>
             <div className='header-cart-buttons flex-w w-full'>
-              <a
-                href='shoping-cart.html'
-                className='flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10'>
-                View Cart
-              </a>
+              <Link href={routes.cart}>
+                <a className='flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10'>
+                  View Cart
+                </a>
+              </Link>
               <a
                 href='shoping-cart.html'
                 className='flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10'>

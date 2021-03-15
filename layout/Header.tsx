@@ -1,10 +1,10 @@
 import { FC, useEffect, useRef } from 'react';
 import { Utils } from 'utils';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import routes from 'routes';
 import { PageHeaderLinks } from 'enums';
 import { useWishlistStore } from 'store/useWishlistStore';
+import { useCartStore } from 'store/useCartStore';
 
 interface HeaderProps {
   isHomePage: boolean;
@@ -12,13 +12,13 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
-  const router = useRouter();
   const headerDesktopRef = useRef<HTMLDivElement>(null);
   const wrapMenuRef = useRef<HTMLDivElement>(null);
   const topBarRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const wishlist = useWishlistStore(state => state.wishlist);
+  const cart = useCartStore(state => state.cart);
 
   const scrollHandler = () => {
     if (!topBarRef?.current?.clientHeight) return;
@@ -139,23 +139,16 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
             <div className='wrap-icon-header flex-w flex-r-m'>
               <div
                 className='icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart'
-                data-notify='2'
+                data-notify={cart.length > 9 ? '9+' : cart.length}
                 onClick={Utils.toggleCartPanelHandler}>
                 <i className='zmdi zmdi-shopping-cart'></i>
               </div>
-              <Link
-                href={{
-                  pathname: router.pathname,
-                  query: { ...router.query, wishlist: true }
-                }}
-                shallow>
-                <a
-                  className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti'
-                  data-notify={wishlist.length > 9 ? '9+' : wishlist.length}
-                  onClick={Utils.toggleWishlistPanelHandler}>
-                  <i className='zmdi zmdi-favorite-outline'></i>
-                </a>
-              </Link>
+              <div
+                className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti'
+                data-notify={wishlist.length > 9 ? '9+' : wishlist.length}
+                onClick={Utils.toggleWishlistPanelHandler}>
+                <i className='zmdi zmdi-favorite-outline'></i>
+              </div>
             </div>
           </nav>
         </div>
@@ -173,23 +166,16 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
         <div className='wrap-icon-header flex-w flex-r-m m-r-15'>
           <div
             className='icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart'
-            data-notify='2'
+            data-notify={cart.length > 9 ? '9+' : cart.length}
             onClick={Utils.toggleCartPanelHandler}>
             <i className='zmdi zmdi-shopping-cart'></i>
           </div>
-          <Link
-            href={{
-              pathname: router.pathname,
-              query: { ...router.query, wishlist: true }
-            }}
-            shallow>
-            <a
-              className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti'
-              data-notify={wishlist.length > 9 ? '9+' : wishlist.length}
-              onClick={Utils.toggleWishlistPanelHandler}>
-              <i className='zmdi zmdi-favorite-outline'></i>
-            </a>
-          </Link>
+          <div
+            className='dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti'
+            data-notify={wishlist.length > 9 ? '9+' : wishlist.length}
+            onClick={Utils.toggleWishlistPanelHandler}>
+            <i className='zmdi zmdi-favorite-outline'></i>
+          </div>
         </div>
 
         <div

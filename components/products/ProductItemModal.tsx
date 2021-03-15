@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 // import Select from 'react-select';
@@ -5,41 +6,115 @@ import swal from 'sweetalert';
 import Slider from 'react-slick';
 import { Utils } from 'utils';
 import { useProductStore } from 'store/useProductStore';
+import { useCartStore } from 'store/useCartStore';
+import { useWishlistStore } from 'store/useWishlistStore';
+
+const sliderSettings = {
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  fade: true,
+  infinite: true,
+  autoplay: false,
+  autoplaySpeed: 2000,
+  arrows: false
+};
 
 const ProductItemModal = () => {
   const product = useProductStore(state => state.product);
+  const wishlist = useWishlistStore(state => state.wishlist);
+  const addToWishlistHandler = useWishlistStore(
+    state => state.addToWishlistHandler
+  );
+  const removeFromWishlistHandler = useWishlistStore(
+    state => state.removeFromWishlistHandler
+  );
+  const cart = useCartStore(state => state.cart);
+  const addToCartHandler = useCartStore(state => state.addToCartHandler);
+  const removeFromCartHandler = useCartStore(
+    state => state.removeFromCartHandler
+  );
   const sliderRef = useRef<Slider>(null);
   const [numberOfProduct, setNumberOfProduct] = useState(1);
-  const sliderSettings = {
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    fade: true,
-    infinite: true,
-    autoplay: false,
-    autoplaySpeed: 2000,
-    arrows: false
-  };
-  const sizeOptions = [
-    { value: 's', label: 'Size S' },
-    { value: 'm', label: 'Size M' },
-    { value: 'l', label: 'Size L' },
-    { value: 'xl', label: 'Size XL' }
-  ];
-  const colorOptions = [
-    { value: 'red', label: 'Red' },
-    { value: 'blue', label: 'Blue' },
-    { value: 'white', label: 'White' },
-    { value: 'grey', label: 'Grey' }
-  ];
+
+  const isProductInWishlist = useMemo(() => {
+    if (Utils.isServer || !wishlist || !product) return false;
+
+    return wishlist.some(item => item.id === product.id);
+  }, [wishlist, product]);
+
+  const isProductInCart = useMemo(() => {
+    if (Utils.isServer || !cart || !product) return false;
+
+    return cart.some(item => item.product.id === product.id);
+  }, [cart, product]);
 
   const hideProductItemModalHandler = () => {
     document.querySelector('.js-modal1').classList.remove('show-modal1');
   };
 
-  const addToCartHandler = () => {
-    const productName = document.querySelector('.js-name-detail').textContent;
-    swal(productName, 'is added to cart !', 'success');
+  const cartBtnCallback = () => {
+    swal(
+      product.name,
+      isProductInCart ? 'is removed from cart' : 'is added to cart !',
+      'success'
+    );
   };
+
+  const cartBtnHandler = () => {
+    if (isProductInCart) {
+      removeFromCartHandler(product.id, cartBtnCallback);
+    } else {
+      addToCartHandler(product, numberOfProduct, cartBtnCallback);
+    }
+  };
+
+  const productWishlistHandler = () => {
+    if (isProductInWishlist) {
+      removeFromWishlistHandler(product.id);
+      swal(product.name, 'is removed from wishlist !', 'success');
+    } else {
+      addToWishlistHandler(product);
+      swal(product.name, 'is added to wishlist !', 'success');
+    }
+  };
+
+  const decrementNumberOfProductHandler = () => {
+    if (numberOfProduct === 1) return;
+
+    if (isProductInCart) {
+      addToCartHandler(product, numberOfProduct - 1);
+    }
+    Utils.decrementNumberOfProduct(setNumberOfProduct);
+  };
+
+  const incrementNumberOfProductHandler = () => {
+    if (isProductInCart) {
+      addToCartHandler(product, numberOfProduct + 1);
+    }
+    Utils.incrementNumberOfProduct(setNumberOfProduct);
+  };
+
+  useEffect(() => {
+    const wishlistElement = document.querySelector('.js-addwish-detail');
+    if (wishlistElement) {
+      if (isProductInWishlist) {
+        wishlistElement.classList.add('cl1');
+        wishlistElement.classList.remove('cl3');
+      } else {
+        wishlistElement.classList.add('cl3');
+        wishlistElement.classList.remove('cl1');
+      }
+    }
+  }, [isProductInWishlist]);
+
+  useEffect(() => {
+    if (isProductInCart) {
+      const cartProduct = cart.find(item => item.product.id === product.id);
+      setNumberOfProduct(cartProduct.quantity);
+    } else {
+      setNumberOfProduct(1);
+    }
+  }, [isProductInCart, product]);
 
   return (
     <div className='wrap-modal1 js-modal1 p-t-60 p-b-20'>
@@ -110,16 +185,6 @@ const ProductItemModal = () => {
                     </p>
                     <div className='p-t-33'>
                       {/* <div className='flex-w flex-r-m p-b-10'>
-                        <div className='size-203 flex-c-m respon6'>Size</div>
-                        <div className='size-204 respon6-next'>
-                          <Select
-                            instanceId='size'
-                            options={sizeOptions}
-                            placeholder='Choose an option'
-                          />
-                        </div>
-                      </div> */}
-                      {/* <div className='flex-w flex-r-m p-b-10'>
                         <div className='size-203 flex-c-m respon6'>Color</div>
                         <div className='size-204 respon6-next'>
                           <Select
@@ -129,52 +194,47 @@ const ProductItemModal = () => {
                           />
                         </div>
                       </div> */}
-                      <div className='flex-w flex-r-m p-b-10'>
+                      <div className='flex-w flex-r-s p-b-10'>
                         <div className='size-204 flex-w flex-m respon6-next'>
                           <div className='wrap-num-product flex-w m-r-20 m-tb-10'>
                             <div
                               className='btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m'
-                              onClick={() =>
-                                Utils.decrementNumberOfProduct(
-                                  setNumberOfProduct
-                                )
-                              }>
+                              onClick={decrementNumberOfProductHandler}>
                               <i className='fs-16 zmdi zmdi-minus'></i>
                             </div>
                             <input
                               className='mtext-104 cl3 txt-center num-product'
                               type='number'
                               name='num-product'
+                              disabled
                               value={numberOfProduct}
-                              onChange={e =>
-                                setNumberOfProduct(Number(e.target.value))
-                              }
                             />
                             <div
                               className='btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m'
-                              onClick={() =>
-                                Utils.incrementNumberOfProduct(
-                                  setNumberOfProduct
-                                )
-                              }>
+                              onClick={incrementNumberOfProductHandler}>
                               <i className='fs-16 zmdi zmdi-plus'></i>
                             </div>
                           </div>
                           <button
                             className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail'
-                            onClick={addToCartHandler}>
-                            Add to cart
+                            onClick={cartBtnHandler}>
+                            {isProductInCart
+                              ? 'Remove from cart'
+                              : 'Add to cart'}
                           </button>
                         </div>
                       </div>
                     </div>
-
-                    <div className='flex-w flex-m p-l-100 p-t-40 respon7'>
+                    <div className='flex-w flex-r-s p-t-40'>
                       <div className='flex-m bor9 p-r-10 m-r-11'>
                         <a
-                          href='#'
                           className='fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100'
-                          data-tooltip='Add to Wishlist'>
+                          data-tooltip={
+                            isProductInWishlist
+                              ? 'Remove from Wishlist'
+                              : 'Add to Wishlist'
+                          }
+                          onClick={productWishlistHandler}>
                           <i className='zmdi zmdi-favorite'></i>
                         </a>
                       </div>

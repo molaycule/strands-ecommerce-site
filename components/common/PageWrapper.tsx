@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import CartPanel from 'components/cart/CartPanel';
 import { PageHeaderLinks } from 'enums';
 import Footer from 'layout/Footer';
 import { useRouter } from 'next/dist/client/router';
@@ -15,6 +14,9 @@ const WishlistPanel = dynamic(
   () => import('components/wishlist/WishlistPanel'),
   { ssr: false }
 );
+const CartPanel = dynamic(() => import('components/cart/CartPanel'), {
+  ssr: false
+});
 
 interface PageWrapperProps {
   isHomePage?: boolean;
