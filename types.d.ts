@@ -44,7 +44,7 @@ export type Product = {
   id: string;
   name: string;
   description: string;
-  price: float;
+  price: number;
   category: {
     name: string;
   };
@@ -74,4 +74,9 @@ export type ProductRepositoryKey = {
 export type ProductRepository = {
   products: Map<string, Product>;
   total: number;
+};
+
+export type CartItem = {
+  product: Product;
+  quantity: number;
 };

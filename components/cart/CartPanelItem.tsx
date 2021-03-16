@@ -2,9 +2,12 @@ import { FC } from 'react';
 import { useCartStore } from 'store/useCartStore';
 import { CartItemProps } from './CartItem';
 
-export interface CartPanelItemProps extends CartItemProps {
+export interface CartPanelItemProps {
   productId: string;
+  imageUrl: string;
+  itemName: string;
   quantity: number;
+  price: number;
 }
 
 const CartPanelItem: FC<CartPanelItemProps> = ({

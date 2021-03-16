@@ -1,47 +1,60 @@
-import { FC, useState } from 'react';
-import { Utils } from 'utils';
+import dynamic from 'next/dynamic';
+import useIsProductInCart from 'hooks/useIsProductInCart';
+import { FC, useState, useEffect } from 'react';
+import { useCartStore } from 'store/useCartStore';
+import { Product } from 'types';
+
+const ProductQuantitySetter = dynamic(
+  () => import('components/common/ProductQuantitySetter'),
+  {
+    ssr: false
+  }
+);
 
 export interface CartItemProps {
-  imageUrl: string;
-  itemName: string;
-  price: string;
+  product: Product;
 }
 
-const CartItem: FC<CartItemProps> = ({ imageUrl, itemName, price }) => {
+const CartItem: FC<CartItemProps> = ({ product }) => {
+  const cart = useCartStore(state => state.cart);
+  const removeFromCartHandler = useCartStore(
+    state => state.removeFromCartHandler
+  );
+  const isProductInCart = useIsProductInCart(product, cart);
   const [numberOfProduct, setNumberOfProduct] = useState(1);
+
+  useEffect(() => {
+    if (isProductInCart) {
+      const cartProduct = cart.find(item => item.product.id === product.id);
+      setNumberOfProduct(cartProduct.quantity);
+    } else {
+      setNumberOfProduct(1);
+    }
+  }, [isProductInCart, product]);
 
   return (
     <tr className='table_row'>
       <td className='column-1'>
-        <div className='how-itemcart1'>
-          <img src={imageUrl} alt='IMG' />
+        <div
+          className='how-itemcart1'
+          onClick={() => removeFromCartHandler(product.id)}>
+          <img src={product.mainImage.publicUrl} alt='IMG' />
         </div>
       </td>
-      <td className='column-2'>{itemName}</td>
-      <td className='column-3'>₦{price}</td>
+      <td className='column-2'>{product.name}</td>
+      <td className='column-3'>₦{product.price.toFixed(2)}</td>
       <td className='column-4'>
         <div className='wrap-num-product flex-w m-l-auto m-r-0'>
-          <div
-            className='btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m'
-            onClick={() => Utils.decrementNumberOfProduct(setNumberOfProduct)}>
-            <i className='fs-16 zmdi zmdi-minus'></i>
-          </div>
-          <input
-            className='mtext-104 cl3 txt-center num-product'
-            type='number'
-            name='num-product1'
-            value={numberOfProduct}
-            onChange={e => setNumberOfProduct(Number(e.target.value))}
+          <ProductQuantitySetter
+            product={product}
+            numberOfProduct={numberOfProduct}
+            setNumberOfProduct={setNumberOfProduct}
+            isProductInCart={isProductInCart}
           />
-          <div
-            className='btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m'
-            onClick={() => Utils.incrementNumberOfProduct(setNumberOfProduct)}>
-            <i className='fs-16 zmdi zmdi-plus'></i>
-          </div>
         </div>
       </td>
       <td className='column-5'>
-        ₦{(numberOfProduct * Number(price)).toFixed(2)}
+        ₦{(numberOfProduct * Number(product.price)).toFixed(2)}
       </td>
     </tr>
   );

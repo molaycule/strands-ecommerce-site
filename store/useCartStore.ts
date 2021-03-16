@@ -1,12 +1,9 @@
-import { Product } from 'types';
+import { CartItem, Product } from 'types';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
 type CartState = {
-  cart: {
-    product: Product;
-    quantity: number;
-  }[];
+  cart: CartItem[];
   addToCartHandler: (
     product: Product,
     quantity: number,

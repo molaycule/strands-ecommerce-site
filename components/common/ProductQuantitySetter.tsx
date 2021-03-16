@@ -1,20 +1,21 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useCartStore } from 'store/useCartStore';
-import { useProductStore } from 'store/useProductStore';
+import { Product } from 'types';
 import { Utils } from 'utils';
 
 interface ProductQuantitySetterProps {
+  product: Product;
   numberOfProduct: number;
   setNumberOfProduct: Dispatch<SetStateAction<number>>;
   isProductInCart: boolean;
 }
 
 const ProductQuantitySetter: FC<ProductQuantitySetterProps> = ({
+  product,
   numberOfProduct,
   setNumberOfProduct,
   isProductInCart
 }) => {
-  const product = useProductStore(state => state.product);
   const addToCartHandler = useCartStore(state => state.addToCartHandler);
 
   const decrementNumberOfProductHandler = () => {

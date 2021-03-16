@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 // import Select from 'react-select';
@@ -7,9 +7,16 @@ import Slider from 'react-slick';
 import { useProductStore } from 'store/useProductStore';
 import { useCartStore } from 'store/useCartStore';
 import { useWishlistStore } from 'store/useWishlistStore';
-import ProductQuantitySetter from 'components/common/ProductQuantitySetter';
+import dynamic from 'next/dynamic';
 import useIsProductInCart from 'hooks/useIsProductInCart';
 import useIsProductInWishlist from 'hooks/useIsProductInWishlist';
+
+const ProductQuantitySetter = dynamic(
+  () => import('components/common/ProductQuantitySetter'),
+  {
+    ssr: false
+  }
+);
 
 const sliderSettings = {
   slidesToShow: 1,
@@ -35,7 +42,7 @@ const ProductItemModal = () => {
     state => state.removeFromCartHandler
   );
   const sliderRef = useRef<Slider>(null);
-  const isProductInCart = useIsProductInCart();
+  const isProductInCart = useIsProductInCart(product, cart);
   const isProductInWishlist = useIsProductInWishlist();
   const [numberOfProduct, setNumberOfProduct] = useState(1);
 
@@ -173,6 +180,7 @@ const ProductItemModal = () => {
                         <div className='size-204 flex-w flex-m respon6-next'>
                           <div className='wrap-num-product flex-w m-r-20 m-tb-10'>
                             <ProductQuantitySetter
+                              product={product}
                               numberOfProduct={numberOfProduct}
                               setNumberOfProduct={setNumberOfProduct}
                               isProductInCart={isProductInCart}

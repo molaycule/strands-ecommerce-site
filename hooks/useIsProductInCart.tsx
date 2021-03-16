@@ -1,12 +1,8 @@
 import { useMemo } from 'react';
 import { Utils } from 'utils';
-import { useProductStore } from 'store/useProductStore';
-import { useCartStore } from 'store/useCartStore';
+import { Product, CartItem } from 'types';
 
-const useIsProductInCart = () => {
-  const product = useProductStore(state => state.product);
-  const cart = useCartStore(state => state.cart);
-
+const useIsProductInCart = (product: Product, cart: CartItem[]) => {
   const isProductInCart = useMemo(() => {
     if (Utils.isServer || !cart || !product) return false;
 
