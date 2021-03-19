@@ -2,10 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
 import Select from 'react-select';
 import { useCartStore } from 'store/useCartStore';
+import { useShippingStore } from 'store/useShippingStore';
 import { useQuery } from '@apollo/client';
 import { AllShippings } from 'types';
 import { ALL_SHIPPINGS } from 'graphql/queries';
 import { useEffect, useState } from 'react';
+import { SelectOptions } from 'types';
+import Link from 'next/link';
+import routes from 'routes';
 
 const CartItem = dynamic(() => import('components/cart/CartItem'), {
   ssr: false
@@ -13,9 +17,25 @@ const CartItem = dynamic(() => import('components/cart/CartItem'), {
 
 const CartContainer = () => {
   const cart = useCartStore(state => state.cart);
+  const shippingDetails = useShippingStore(state => state.shippingDetails);
+  const updateShippingDetails = useShippingStore(
+    state => state.updateShippingDetails
+  );
   const { data } = useQuery<AllShippings>(ALL_SHIPPINGS);
   const [shippingByCountry, setShippingByCountry] = useState({});
-  const [shippingFee, setShippingFee] = useState(0);
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    shippingDetails?.country || ''
+  );
+  const [selectedState, setSelectedState] = useState(
+    shippingDetails?.state || ''
+  );
+  const [selectedStateFee, setSelectedStateFee] = useState(
+    shippingDetails?.fee || 0
+  );
+  const [address, setAddress] = useState<string>(
+    shippingDetails?.address || ''
+  );
+  const [email, setEmail] = useState<string>(shippingDetails?.email || '');
 
   useEffect(() => {
     if (data) {
@@ -29,19 +49,31 @@ const CartContainer = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    updateShippingDetails({
+      country: selectedCountry,
+      state: selectedState,
+      fee: selectedStateFee,
+      address,
+      email
+    });
+  }, [selectedCountry, selectedState, selectedStateFee, address, email]);
+
   return (
     <>
       <div className='container'>
         <div className='bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg'>
-          <a href='index.html' className='stext-109 cl8 hov-cl1 trans-04'>
-            Home
-            <FontAwesomeIcon
-              icon='angle-right'
-              className='m-l-9 m-r-10'
-              width={4.5}
-              height={12}
-            />
-          </a>
+          <Link href={routes.home}>
+            <a className='stext-109 cl8 hov-cl1 trans-04'>
+              Home
+              <FontAwesomeIcon
+                icon='angle-right'
+                className='m-l-9 m-r-10'
+                width={4.5}
+                height={12}
+              />
+            </a>
+          </Link>
           <span className='stext-109 cl4'>Shoping Cart</span>
         </div>
       </div>
@@ -83,9 +115,6 @@ const CartContainer = () => {
                           Apply coupon
                         </div>
                       </div>
-                      <div className='flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10'>
-                        Update Cart
-                      </div>
                     </div>
                   </>
                 ) : (
@@ -103,7 +132,7 @@ const CartContainer = () => {
                     </div>
                     <div className='size-209'>
                       <span className='mtext-110 cl2'>
-                        ₦{shippingFee.toFixed(2)}
+                        ₦{selectedStateFee.toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -117,7 +146,7 @@ const CartContainer = () => {
                         check your address, or contact us if you need any help.
                       </p> */}
                       <p className='stext-111 cl6 p-t-2'>
-                        Shipping charges varies based on delivery state
+                        Shipping charges varies based on location
                       </p>
                       <div className='p-t-15'>
                         <span className='stext-112 cl8'>
@@ -128,30 +157,63 @@ const CartContainer = () => {
                             instanceId='country'
                             options={Object.keys(shippingByCountry)
                               .sort()
-                              .map((country, index) => ({
+                              .map<SelectOptions<string>>(country => ({
                                 label: country,
-                                value: index
+                                value: country
                               }))}
+                            onChange={(e: SelectOptions<string>) =>
+                              setSelectedCountry(e.value)
+                            }
+                            defaultValue={
+                              shippingDetails?.country && {
+                                label: shippingDetails.country,
+                                value: shippingDetails.country
+                              }
+                            }
                             placeholder='Select a country'
                           />
                         </div>
                         <div className='bor8 bg0 m-b-12'>
                           <Select
                             instanceId='state'
-                            options={data?.allShippings.map(item => ({
+                            options={data?.allShippings.map<
+                              SelectOptions<number>
+                            >(item => ({
                               label: item.state,
                               value: item.fee
                             }))}
-                            onChange={e => setShippingFee(e.value)}
+                            onChange={(e: SelectOptions<number>) => {
+                              setSelectedState(e.label);
+                              setSelectedStateFee(e.value);
+                            }}
+                            defaultValue={
+                              shippingDetails?.state &&
+                              shippingDetails?.fee && {
+                                label: shippingDetails.state,
+                                value: shippingDetails.fee
+                              }
+                            }
                             placeholder='Select a state'
                           />
                         </div>
-                        <div className='bor8 bg0'>
+                        <div className='bor8 bg0 m-b-12'>
                           <input
                             className='stext-111 cl8 plh3 size-111 p-lr-15'
                             type='text'
                             name='address'
                             placeholder='Enter your Address'
+                            value={address}
+                            onChange={e => setAddress(e.target.value)}
+                          />
+                        </div>
+                        <div className='bor8 bg0'>
+                          <input
+                            className='stext-111 cl8 plh3 size-111 p-lr-15'
+                            type='email'
+                            name='email'
+                            placeholder='Enter your Email'
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                           />
                         </div>
                       </div>

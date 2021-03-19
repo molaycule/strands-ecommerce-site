@@ -91,3 +91,16 @@ export type AllShippings = {
     };
   }[];
 };
+
+export type ShippingDetails = {
+  fee?: number;
+  country?: string;
+  state?: string;
+  address?: string;
+  email?: string;
+};
+
+export type SelectOptions<T> = {
+  label: string;
+  value: T;
+};
