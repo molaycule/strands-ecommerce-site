@@ -2,19 +2,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dynamic from 'next/dynamic';
 import Select from 'react-select';
 import { useCartStore } from 'store/useCartStore';
+import { useQuery } from '@apollo/client';
+import { AllShippings } from 'types';
+import { ALL_SHIPPINGS } from 'graphql/queries';
+import { useEffect, useState } from 'react';
 
 const CartItem = dynamic(() => import('components/cart/CartItem'), {
   ssr: false
 });
 
-const countryOptions = [{ value: 'ng', label: 'Nigeria' }];
-const stateOptions = [
-  { value: 'abj', label: 'Abuja' },
-  { value: 'lag', label: 'Lagos' }
-];
-
 const CartContainer = () => {
   const cart = useCartStore(state => state.cart);
+  const { data } = useQuery<AllShippings>(ALL_SHIPPINGS);
+  const [shippingByCountry, setShippingByCountry] = useState({});
+  const [shippingFee, setShippingFee] = useState(0);
+
+  useEffect(() => {
+    if (data) {
+      setShippingByCountry(() => {
+        let groupByCountry = data.allShippings.reduce((acc, cur) => {
+          acc[cur.country.name] = [...(acc[cur.country.name] || []), cur];
+          return acc;
+        }, {});
+        return groupByCountry;
+      });
+    }
+  }, [data]);
 
   return (
     <>
@@ -89,7 +102,9 @@ const CartContainer = () => {
                       <span className='stext-110 cl2'>Shipping Fee:</span>
                     </div>
                     <div className='size-209'>
-                      <span className='mtext-110 cl2'>₦1,000.00</span>
+                      <span className='mtext-110 cl2'>
+                        ₦{shippingFee.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                   <div className='flex-w flex-t bor12 p-t-15 p-b-30'>
@@ -98,25 +113,36 @@ const CartContainer = () => {
                     </div>
                     <div className='size-209 p-r-18 p-r-0-sm w-full-ssm'>
                       {/* <p className='stext-111 cl6 p-t-2'>
-                      There are no shipping methods available. Please double
-                      check your address, or contact us if you need any help.
-                    </p> */}
-                      {/* <div className='p-t-15'> */}
-                      <div>
+                        There are no shipping methods available. Please double
+                        check your address, or contact us if you need any help.
+                      </p> */}
+                      <p className='stext-111 cl6 p-t-2'>
+                        Shipping charges varies based on delivery state
+                      </p>
+                      <div className='p-t-15'>
                         <span className='stext-112 cl8'>
                           Calculate Shipping
                         </span>
                         <div className='rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9'>
                           <Select
                             instanceId='country'
-                            options={countryOptions}
+                            options={Object.keys(shippingByCountry)
+                              .sort()
+                              .map((country, index) => ({
+                                label: country,
+                                value: index
+                              }))}
                             placeholder='Select a country'
                           />
                         </div>
                         <div className='bor8 bg0 m-b-12'>
                           <Select
                             instanceId='state'
-                            options={stateOptions}
+                            options={data?.allShippings.map(item => ({
+                              label: item.state,
+                              value: item.fee
+                            }))}
+                            onChange={e => setShippingFee(e.value)}
                             placeholder='Select a state'
                           />
                         </div>

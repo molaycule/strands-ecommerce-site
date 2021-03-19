@@ -80,3 +80,14 @@ export type CartItem = {
   product: Product;
   quantity: number;
 };
+
+export type AllShippings = {
+  allShippings: {
+    id: string;
+    state: string;
+    fee: number;
+    country: {
+      name: string;
+    };
+  }[];
+};

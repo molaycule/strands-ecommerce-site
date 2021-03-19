@@ -89,3 +89,16 @@ export const ALL_PRODUCTS = gql`
     }
   }
 `;
+
+export const ALL_SHIPPINGS = gql`
+  query {
+    allShippings(where: { isShippingAllowed: true }, sortBy: state_ASC) {
+      id
+      state
+      fee
+      country {
+        name
+      }
+    }
+  }
+`;
