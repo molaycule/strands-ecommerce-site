@@ -8,6 +8,7 @@ const CartPanelItem = dynamic(() => import('./CartPanelItem'), { ssr: false });
 
 const CartPanel = () => {
   const cart = useCartStore(state => state.cart);
+  const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
 
   return (
     <div className='wrap-header-cart js-panel-cart'>
@@ -40,14 +41,7 @@ const CartPanel = () => {
           )}
           <div className='w-full'>
             <div className='header-cart-total w-full p-tb-40'>
-              Total: ₦
-              {cart
-                .map(item => ({
-                  price: Number(item.product.price),
-                  quantity: Number(item.quantity)
-                }))
-                .reduce((acc, cur) => acc + cur.price * cur.quantity, 0)
-                .toFixed(2)}
+              Total: ₦{getCartTotalPrice().toFixed(2)}
             </div>
             <div className='header-cart-buttons flex-w w-full'>
               <Link href={routes.cart}>

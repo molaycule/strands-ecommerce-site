@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 
 type CartState = {
   cart: CartItem[];
+  getCartTotalPrice: () => number;
   addToCartHandler: (
     product: Product,
     quantity: number,
@@ -16,6 +17,13 @@ export const useCartStore = create<CartState>(
   persist(
     (set, get) => ({
       cart: [],
+      getCartTotalPrice: () =>
+        get()
+          .cart.map(item => ({
+            price: Number(item.product.price),
+            quantity: Number(item.quantity)
+          }))
+          .reduce((acc, cur) => acc + cur.price * cur.quantity, 0),
       addToCartHandler: (product, quantity, callback) => {
         if (
           get().cart.some(

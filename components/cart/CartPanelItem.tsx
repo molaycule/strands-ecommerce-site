@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { useCartStore } from 'store/useCartStore';
-import { CartItemProps } from './CartItem';
 
 export interface CartPanelItemProps {
   productId: string;

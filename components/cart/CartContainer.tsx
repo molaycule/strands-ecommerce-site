@@ -11,12 +11,13 @@ import { SelectOptions } from 'types';
 import Link from 'next/link';
 import routes from 'routes';
 
-const CartItem = dynamic(() => import('components/cart/CartItem'), {
+const CartTable = dynamic(() => import('components/cart/CartTable'), {
   ssr: false
 });
 
 const CartContainer = () => {
   const cart = useCartStore(state => state.cart);
+  const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
   const shippingDetails = useShippingStore(state => state.shippingDetails);
   const updateShippingDetails = useShippingStore(
     state => state.updateShippingDetails
@@ -80,48 +81,7 @@ const CartContainer = () => {
       <form className='bg0 p-t-75 p-b-85'>
         <div className='container'>
           <div className='row'>
-            <div className='col-lg-10 col-xl-7 m-lr-auto m-b-50'>
-              <div className='m-l-25 m-r--38 m-lr-0-xl'>
-                {cart.length ? (
-                  <>
-                    <div className='wrap-table-shopping-cart'>
-                      <table className='table-shopping-cart'>
-                        <tbody>
-                          <tr className='table_head'>
-                            <th className='column-1'>Product</th>
-                            <th className='column-2'></th>
-                            <th className='column-3'>Price</th>
-                            <th className='column-4'>Quantity</th>
-                            <th className='column-5'>Total</th>
-                          </tr>
-                          {cart.map(item => (
-                            <CartItem
-                              key={item.product.id}
-                              product={item.product}
-                            />
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className='flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm'>
-                      <div className='flex-w flex-m m-r-20 m-tb-5'>
-                        <input
-                          className='stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5'
-                          type='text'
-                          name='coupon'
-                          placeholder='Coupon Code'
-                        />
-                        <div className='flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5'>
-                          Apply coupon
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <p className='mtext-112 cl2 txt-center'>Cart is Empty...</p>
-                )}
-              </div>
-            </div>
+            <CartTable cart={cart} />
             {cart.length > 0 && (
               <div className='col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50'>
                 <div className='bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm'>
@@ -141,10 +101,6 @@ const CartContainer = () => {
                       <span className='stext-110 cl2'>Shipping:</span>
                     </div>
                     <div className='size-209 p-r-18 p-r-0-sm w-full-ssm'>
-                      {/* <p className='stext-111 cl6 p-t-2'>
-                        There are no shipping methods available. Please double
-                        check your address, or contact us if you need any help.
-                      </p> */}
                       <p className='stext-111 cl6 p-t-2'>
                         Shipping charges varies based on location
                       </p>
@@ -224,7 +180,12 @@ const CartContainer = () => {
                       <span className='mtext-101 cl2'>Total:</span>
                     </div>
                     <div className='size-209 p-t-1'>
-                      <span className='mtext-110 cl2'>₦1,079.65</span>
+                      <span className='mtext-110 cl2'>
+                        ₦
+                        {(
+                          getCartTotalPrice() + shippingDetails?.fee || 0
+                        ).toFixed(2)}
+                      </span>
                     </div>
                   </div>
                   <button className='flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer'>
