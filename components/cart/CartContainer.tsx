@@ -6,7 +6,7 @@ import { useShippingStore } from 'store/useShippingStore';
 import { useQuery } from '@apollo/client';
 import { AllShippings } from 'types';
 import { ALL_SHIPPINGS } from 'graphql/queries';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SelectOptions } from 'types';
 import Link from 'next/link';
 import routes from 'routes';
@@ -15,7 +15,11 @@ const CartTable = dynamic(() => import('components/cart/CartTable'), {
   ssr: false
 });
 
-const CartContainer = () => {
+export interface CartContainerProps {
+  checkout: boolean;
+}
+
+const CartContainer: FC<CartContainerProps> = ({ checkout }) => {
   const cart = useCartStore(state => state.cart);
   const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
   const shippingDetails = useShippingStore(state => state.shippingDetails);
@@ -37,6 +41,8 @@ const CartContainer = () => {
     shippingDetails?.address || ''
   );
   const [email, setEmail] = useState<string>(shippingDetails?.email || '');
+  const [phone, setPhone] = useState<string>(shippingDetails?.phone || '');
+  const [btnPayDisabled, setBtnPayDisabled] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -56,9 +62,20 @@ const CartContainer = () => {
       state: selectedState,
       fee: selectedStateFee,
       address,
-      email
+      email,
+      phone
     });
-  }, [selectedCountry, selectedState, selectedStateFee, address, email]);
+    setBtnPayDisabled(
+      !!!(
+        selectedCountry &&
+        selectedState &&
+        selectedStateFee &&
+        address &&
+        email &&
+        phone
+      )
+    );
+  }, [selectedCountry, selectedState, selectedStateFee, address, email, phone]);
 
   return (
     <>
@@ -81,8 +98,8 @@ const CartContainer = () => {
       <form className='bg0 p-t-75 p-b-85'>
         <div className='container'>
           <div className='row'>
-            <CartTable cart={cart} />
-            {cart.length > 0 && (
+            <CartTable cart={cart} checkout={checkout} />
+            {checkout && cart.length > 0 && (
               <div className='col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50'>
                 <div className='bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm'>
                   <h4 className='mtext-109 cl2 p-b-30'>Cart Totals</h4>
@@ -162,7 +179,7 @@ const CartContainer = () => {
                             onChange={e => setAddress(e.target.value)}
                           />
                         </div>
-                        <div className='bor8 bg0'>
+                        <div className='bor8 bg0 m-b-12'>
                           <input
                             className='stext-111 cl8 plh3 size-111 p-lr-15'
                             type='email'
@@ -170,6 +187,16 @@ const CartContainer = () => {
                             placeholder='Enter your Email'
                             value={email}
                             onChange={e => setEmail(e.target.value)}
+                          />
+                        </div>
+                        <div className='bor8 bg0'>
+                          <input
+                            className='stext-111 cl8 plh3 size-111 p-lr-15'
+                            type='phone'
+                            name='phone'
+                            placeholder='Enter your Phone No.'
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
                           />
                         </div>
                       </div>
@@ -188,8 +215,10 @@ const CartContainer = () => {
                       </span>
                     </div>
                   </div>
-                  <button className='flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer'>
-                    Proceed to Checkout
+                  <button
+                    className='flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer btn-pay'
+                    disabled={btnPayDisabled}>
+                    Proceed to Payment
                   </button>
                 </div>
               </div>

@@ -98,6 +98,7 @@ export type ShippingDetails = {
   state?: string;
   address?: string;
   email?: string;
+  phone?: string;
 };
 
 export type SelectOptions<T> = {

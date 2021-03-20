@@ -8,7 +8,8 @@ type ShippingState = {
     country,
     state,
     address,
-    email
+    email,
+    phone
   }: ShippingDetails) => void;
 };
 

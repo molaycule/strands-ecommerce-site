@@ -18643,3 +18643,15 @@ iframe {
   height: 32px;
   margin-left: -30px;
 }
+
+.btn-pay:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.btn-pay:disabled:hover {
+  opacity: 0.2;
+  border-color: #222 !important;
+  background-color: #222 !important;
+  color: #fff !important;
+}

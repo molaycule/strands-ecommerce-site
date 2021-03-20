@@ -1,16 +1,19 @@
 import dynamic from 'next/dynamic';
 import { CartItem as CartItemType } from 'types';
 import { FC } from 'react';
+import Link from 'next/link';
+import routes from 'routes';
+import { CartContainerProps } from './CartContainer';
 
 const CartItem = dynamic(() => import('components/cart/CartItem'), {
   ssr: false
 });
 
-interface CartTableProps {
+interface CartTableProps extends CartContainerProps {
   cart: CartItemType[];
 }
 
-const CartTable: FC<CartTableProps> = ({ cart }) => {
+const CartTable: FC<CartTableProps> = ({ cart, checkout }) => {
   return (
     <div className='col-lg-10 col-xl-7 m-lr-auto m-b-50'>
       <div className='m-l-25 m-r--38 m-lr-0-xl'>
@@ -44,6 +47,13 @@ const CartTable: FC<CartTableProps> = ({ cart }) => {
                   Apply coupon
                 </div>
               </div>
+              {!checkout && (
+                <Link href={routes.checkout}>
+                  <a className='flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10'>
+                    Checkout
+                  </a>
+                </Link>
+              )}
             </div>
           </>
         ) : (

@@ -5,12 +5,12 @@ const CartContainer = dynamic(() => import('components/cart/CartContainer'), {
   ssr: false
 });
 
-const cart = () => {
+const checkout = () => {
   return (
     <PageWrapper>
-      <CartContainer checkout={false} />
+      <CartContainer checkout />
     </PageWrapper>
   );
 };
 
-export default cart;
+export default checkout;

@@ -49,11 +49,11 @@ const CartPanel = () => {
                   View Cart
                 </a>
               </Link>
-              <a
-                href='shoping-cart.html'
-                className='flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10'>
-                Check Out
-              </a>
+              <Link href={routes.checkout}>
+                <a className='flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10'>
+                  Check Out
+                </a>
+              </Link>
             </div>
           </div>
         </div>
