@@ -1,13 +1,34 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Select from 'react-select';
-import { SelectOptions } from 'types';
+import { CartItem, SelectOptions } from 'types';
 import { useCartStore } from 'store/useCartStore';
 import { useShippingStore } from 'store/useShippingStore';
 import { useQuery } from '@apollo/client';
 import { AllShippings } from 'types';
 import { ALL_SHIPPINGS } from 'graphql/queries';
+import { usePaystackPayment } from 'react-paystack';
 
-const CartCheckout = () => {
+const onSuccess = reference => {
+  // Implementation for whatever you want to do with reference and after success call.
+  // message: 'Approved';
+  // reference: '1616225820392';
+  // status: 'success';
+  // trans: '1047177899';
+  // transaction: '1047177899';
+  // trxref: '1616225820392';
+  console.log(reference);
+};
+
+const onClose = () => {
+  // implementation for  whatever you want to do when the Paystack dialog closed.
+  console.log('closed');
+};
+
+interface CartCheckoutProps {
+  cart: CartItem[];
+}
+
+const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
   const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
   const updateShippingDetails = useShippingStore(
     state => state.updateShippingDetails
@@ -29,7 +50,14 @@ const CartCheckout = () => {
   );
   const [email, setEmail] = useState<string>(shippingDetails?.email || '');
   const [phone, setPhone] = useState<string>(shippingDetails?.phone || '');
+  const [totalAmount, setTotalAmount] = useState(0);
   const [btnPayDisabled, setBtnPayDisabled] = useState(false);
+  const initializePayment = usePaystackPayment({
+    reference: new Date().getTime().toString(),
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_TEST_KEY,
+    email,
+    amount: totalAmount * 100
+  });
 
   useEffect(() => {
     if (data) {
@@ -42,6 +70,12 @@ const CartCheckout = () => {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    const newTotalAmount = getCartTotalPrice() + shippingDetails?.fee || 0;
+    if (newTotalAmount === totalAmount) return;
+    setTotalAmount(newTotalAmount);
+  }, [shippingDetails, cart]);
 
   useEffect(() => {
     updateShippingDetails({
@@ -170,14 +204,15 @@ const CartCheckout = () => {
             <span className='mtext-101 cl2'>Total:</span>
           </div>
           <div className='size-209 p-t-1'>
-            <span className='mtext-110 cl2'>
-              ₦{(getCartTotalPrice() + shippingDetails?.fee || 0).toFixed(2)}
-            </span>
+            <span className='mtext-110 cl2'>₦{totalAmount.toFixed(2)}</span>
           </div>
         </div>
         <button
           className='flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer btn-pay'
-          disabled={btnPayDisabled}>
+          disabled={btnPayDisabled}
+          onClick={() => {
+            initializePayment(onSuccess, onClose);
+          }}>
           Proceed to Payment
         </button>
       </div>

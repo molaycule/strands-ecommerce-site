@@ -38,14 +38,14 @@ const CartContainer: FC<CartContainerProps> = ({ checkout }) => {
           <span className='stext-109 cl4'>Shopping Cart</span>
         </div>
       </div>
-      <form className='bg0 p-t-75 p-b-85'>
+      <div className='bg0 p-t-75 p-b-85'>
         <div className='container'>
           <div className='row'>
             <CartTable cart={cart} checkout={checkout} />
-            {checkout && cart.length > 0 && <CartCheckout />}
+            {checkout && cart.length > 0 && <CartCheckout cart={cart} />}
           </div>
         </div>
-      </form>
+      </div>
     </>
   );
 };
