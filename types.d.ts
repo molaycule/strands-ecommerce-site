@@ -81,8 +81,8 @@ export type CartItem = {
   quantity: number;
 };
 
-export type AllShippings = {
-  allShippings: {
+export type AllDeliveryFees = {
+  allDeliveryFees: {
     id: string;
     state: string;
     fee: number;
@@ -92,7 +92,7 @@ export type AllShippings = {
   }[];
 };
 
-export type ShippingDetails = {
+export type DeliveryDetails = {
   fee?: number;
   country?: string;
   state?: string;

@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import Select from 'react-select';
 import { CartItem, SelectOptions } from 'types';
 import { useCartStore } from 'store/useCartStore';
-import { useShippingStore } from 'store/useShippingStore';
+import { useDeliveryStore } from 'store/useDeliveryStore';
 import { useQuery } from '@apollo/client';
-import { AllShippings } from 'types';
-import { ALL_SHIPPINGS } from 'graphql/queries';
+import { AllDeliveryFees } from 'types';
+import { ALL_DELIVERY_FEES } from 'graphql/queries';
 import { usePaystackPayment } from 'react-paystack';
 
 const onSuccess = reference => {
@@ -19,10 +19,7 @@ const onSuccess = reference => {
   console.log(reference);
 };
 
-const onClose = () => {
-  // implementation for  whatever you want to do when the Paystack dialog closed.
-  console.log('closed');
-};
+const onClose = () => {};
 
 interface CartCheckoutProps {
   cart: CartItem[];
@@ -30,26 +27,26 @@ interface CartCheckoutProps {
 
 const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
   const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
-  const updateShippingDetails = useShippingStore(
-    state => state.updateShippingDetails
+  const updateDeliveryDetails = useDeliveryStore(
+    state => state.updateDeliveryDetails
   );
-  const shippingDetails = useShippingStore(state => state.shippingDetails);
-  const { data } = useQuery<AllShippings>(ALL_SHIPPINGS);
-  const [shippingByCountry, setShippingByCountry] = useState({});
+  const deliveryDetails = useDeliveryStore(state => state.deliveryDetails);
+  const { data } = useQuery<AllDeliveryFees>(ALL_DELIVERY_FEES);
+  const [deliveryByCountry, setDeliveryByCountry] = useState({});
   const [selectedCountry, setSelectedCountry] = useState<string>(
-    shippingDetails?.country || ''
+    deliveryDetails?.country || ''
   );
   const [selectedState, setSelectedState] = useState(
-    shippingDetails?.state || ''
+    deliveryDetails?.state || ''
   );
   const [selectedStateFee, setSelectedStateFee] = useState(
-    shippingDetails?.fee || 0
+    deliveryDetails?.fee || 0
   );
   const [address, setAddress] = useState<string>(
-    shippingDetails?.address || ''
+    deliveryDetails?.address || ''
   );
-  const [email, setEmail] = useState<string>(shippingDetails?.email || '');
-  const [phone, setPhone] = useState<string>(shippingDetails?.phone || '');
+  const [email, setEmail] = useState<string>(deliveryDetails?.email || '');
+  const [phone, setPhone] = useState<string>(deliveryDetails?.phone || '');
   const [totalAmount, setTotalAmount] = useState(0);
   const [btnPayDisabled, setBtnPayDisabled] = useState(false);
   const initializePayment = usePaystackPayment({
@@ -61,8 +58,8 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
 
   useEffect(() => {
     if (data) {
-      setShippingByCountry(() => {
-        let groupByCountry = data.allShippings.reduce((acc, cur) => {
+      setDeliveryByCountry(() => {
+        let groupByCountry = data.allDeliveryFees.reduce((acc, cur) => {
           acc[cur.country.name] = [...(acc[cur.country.name] || []), cur];
           return acc;
         }, {});
@@ -72,13 +69,13 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
   }, [data]);
 
   useEffect(() => {
-    const newTotalAmount = getCartTotalPrice() + shippingDetails?.fee || 0;
+    const newTotalAmount = getCartTotalPrice() + deliveryDetails?.fee || 0;
     if (newTotalAmount === totalAmount) return;
     setTotalAmount(newTotalAmount);
-  }, [shippingDetails, cart]);
+  }, [deliveryDetails, cart]);
 
   useEffect(() => {
-    updateShippingDetails({
+    updateDeliveryDetails({
       country: selectedCountry,
       state: selectedState,
       fee: selectedStateFee,
@@ -104,7 +101,7 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
         <h4 className='mtext-109 cl2 p-b-30'>Cart Totals</h4>
         <div className='flex-w flex-m bor12 p-b-13'>
           <div className='size-208'>
-            <span className='stext-110 cl2'>Shipping Fee:</span>
+            <span className='stext-110 cl2'>Delivery Fee:</span>
           </div>
           <div className='size-209'>
             <span className='mtext-110 cl2'>
@@ -114,18 +111,18 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
         </div>
         <div className='flex-w flex-t bor12 p-t-15 p-b-30'>
           <div className='size-208 w-full-ssm'>
-            <span className='stext-110 cl2'>Shipping:</span>
+            <span className='stext-110 cl2'>Delivery:</span>
           </div>
           <div className='size-209 p-r-18 p-r-0-sm w-full-ssm'>
             <p className='stext-111 cl6 p-t-2'>
-              Shipping charges varies based on location
+              Delivery fee varies based on location
             </p>
             <div className='p-t-15'>
-              <span className='stext-112 cl8'>Calculate Shipping</span>
+              <span className='stext-112 cl8'>Enter your details</span>
               <div className='rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9'>
                 <Select
                   instanceId='country'
-                  options={Object.keys(shippingByCountry)
+                  options={Object.keys(deliveryByCountry)
                     .sort()
                     .map<SelectOptions<string>>(country => ({
                       label: country,
@@ -135,9 +132,9 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
                     setSelectedCountry(e.value)
                   }
                   defaultValue={
-                    shippingDetails?.country && {
-                      label: shippingDetails.country,
-                      value: shippingDetails.country
+                    deliveryDetails?.country && {
+                      label: deliveryDetails.country,
+                      value: deliveryDetails.country
                     }
                   }
                   placeholder='Select a country'
@@ -146,7 +143,7 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
               <div className='bor8 bg0 m-b-12'>
                 <Select
                   instanceId='state'
-                  options={data?.allShippings.map<SelectOptions<number>>(
+                  options={data?.allDeliveryFees.map<SelectOptions<number>>(
                     item => ({
                       label: item.state,
                       value: item.fee
@@ -157,10 +154,10 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
                     setSelectedStateFee(e.value);
                   }}
                   defaultValue={
-                    shippingDetails?.state &&
-                    shippingDetails?.fee && {
-                      label: shippingDetails.state,
-                      value: shippingDetails.fee
+                    deliveryDetails?.state &&
+                    deliveryDetails?.fee && {
+                      label: deliveryDetails.state,
+                      value: deliveryDetails.fee
                     }
                   }
                   placeholder='Select a state'
@@ -204,7 +201,7 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
             <span className='mtext-101 cl2'>Total:</span>
           </div>
           <div className='size-209 p-t-1'>
-            <span className='mtext-110 cl2'>₦{totalAmount.toFixed(2)}</span>
+            <span className='mtext-101 cl2'>₦{totalAmount.toFixed(2)}</span>
           </div>
         </div>
         <button

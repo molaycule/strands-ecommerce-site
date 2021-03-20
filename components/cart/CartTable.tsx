@@ -4,6 +4,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import routes from 'routes';
 import { CartContainerProps } from './CartContainer';
+import { useCartStore } from 'store/useCartStore';
 
 const CartItem = dynamic(() => import('components/cart/CartItem'), {
   ssr: false
@@ -14,6 +15,8 @@ interface CartTableProps extends CartContainerProps {
 }
 
 const CartTable: FC<CartTableProps> = ({ cart, checkout }) => {
+  const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
+
   return (
     <div className='col-lg-10 col-xl-7 m-lr-auto m-b-50'>
       <div className='m-l-25 m-r--38 m-lr-0-xl'>
@@ -55,6 +58,18 @@ const CartTable: FC<CartTableProps> = ({ cart, checkout }) => {
                 </Link>
               )}
             </div>
+            {!checkout && (
+              <>
+                <div className='flex-w flex-t p-t-27'>
+                  <span className='mtext-101 cl2'>
+                    Total:&emsp;₦{getCartTotalPrice().toFixed(2)}
+                  </span>
+                </div>
+                <p className='stext-111 cl6 p-t-2'>
+                  Delivery fee not included yet
+                </p>
+              </>
+            )}
           </>
         ) : (
           <p className='mtext-112 cl2 txt-center'>Cart is Empty...</p>

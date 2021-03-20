@@ -90,9 +90,9 @@ export const ALL_PRODUCTS = gql`
   }
 `;
 
-export const ALL_SHIPPINGS = gql`
+export const ALL_DELIVERY_FEES = gql`
   query {
-    allShippings(where: { isShippingAllowed: true }, sortBy: state_ASC) {
+    allDeliveryFees(where: { isDeliveryAllowed: true }, sortBy: state_ASC) {
       id
       state
       fee

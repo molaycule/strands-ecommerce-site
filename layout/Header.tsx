@@ -62,7 +62,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
         <div className='top-bar' ref={topBarRef}>
           <div className='content-topbar flex-sb-m h-full container'>
             <div className='left-top-bar'>
-              Free shipping for standard order over ₦5,000
+              Free delivery for standard order over ₦5,000
             </div>
             <div className='right-top-bar flex-w h-full'>
               <a href='#' className='flex-c-m trans-04 p-lr-25'>
@@ -192,7 +192,7 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
         <ul className='topbar-mobile'>
           <li>
             <div className='left-top-bar'>
-              Free shipping for standard order over ₦5,000
+              Free delivery for standard order over ₦5,000
             </div>
           </li>
           <li>
