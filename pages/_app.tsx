@@ -22,7 +22,10 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5000/admin/api',
+  uri:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:5000/admin/api'
+      : 'https://strands.herokuapp.com/admin/api',
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
