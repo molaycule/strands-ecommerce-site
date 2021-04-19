@@ -49,8 +49,7 @@ const contact = () => {
                 <div className='size-212 p-t-2'>
                   <span className='mtext-110 cl2'>Address</span>
                   <p className='stext-115 cl6 size-213 p-t-18'>
-                    Coza Store Center 8th floor, 379 Hudson St, New York, NY
-                    10018 US
+                    5/7 Peter Ujomu close, Seaside Estate, Badore, Ajah, Lagos
                   </p>
                 </div>
               </div>
@@ -60,9 +59,7 @@ const contact = () => {
                 </span>
                 <div className='size-212 p-t-2'>
                   <span className='mtext-110 cl2'>Lets Talk</span>
-                  <p className='stext-115 cl1 size-213 p-t-18'>
-                    +1 800 1236879
-                  </p>
+                  <p className='stext-115 cl1 size-213 p-t-18'>08108877482</p>
                 </div>
               </div>
               <div className='flex-w w-full'>
@@ -72,7 +69,7 @@ const contact = () => {
                 <div className='size-212 p-t-2'>
                   <span className='mtext-110 cl2'>Sale Support</span>
                   <p className='stext-115 cl1 size-213 p-t-18'>
-                    contact@strands.com
+                    marketing@strands.com.ng
                   </p>
                 </div>
               </div>
