@@ -7,25 +7,29 @@ import { useQuery } from '@apollo/client';
 import { AllDeliveryFees } from 'types';
 import { ALL_DELIVERY_FEES } from 'graphql/queries';
 import { usePaystackPayment } from 'react-paystack';
-
-const onSuccess = reference => {
-  // Implementation for whatever you want to do with reference and after success call.
-  // message: 'Approved';
-  // reference: '1616225820392';
-  // status: 'success';
-  // trans: '1047177899';
-  // transaction: '1047177899';
-  // trxref: '1616225820392';
-  console.log(reference);
-};
-
-const onClose = () => {};
+import { useMutation } from '@apollo/client';
+import { CREATE_ORDER } from 'graphql/mutations';
+import swal from 'sweetalert';
 
 interface CartCheckoutProps {
   cart: CartItem[];
+  clearCart: () => void;
 }
 
-const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
+const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
+  const [createOrder] = useMutation(CREATE_ORDER, {
+    onCompleted({ createOrder }) {
+      const { orderNumber } = createOrder;
+      swal(
+        'Order Confirmed',
+        `Thank you for your order. Your order number is ${orderNumber}`,
+        'success'
+      ).then(() => {
+        clearCart();
+        window.scroll(0, 0);
+      });
+    }
+  });
   const getCartTotalPrice = useCartStore(state => state.getCartTotalPrice);
   const updateDeliveryDetails = useDeliveryStore(
     state => state.updateDeliveryDetails
@@ -46,7 +50,10 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
     deliveryDetails?.address || ''
   );
   const [email, setEmail] = useState<string>(deliveryDetails?.email || '');
-  const [phone, setPhone] = useState<string>(deliveryDetails?.phone || '');
+  const [name, setName] = useState<string>(deliveryDetails?.name || '');
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    deliveryDetails?.phoneNumber || ''
+  );
   const [totalAmount, setTotalAmount] = useState(0);
   const [btnPayDisabled, setBtnPayDisabled] = useState(false);
   const initializePayment = usePaystackPayment({
@@ -55,6 +62,45 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
     email,
     amount: totalAmount * 100
   });
+
+  const onSuccess = (data: {
+    reference: string;
+    transaction: string;
+    message: string;
+    status: string;
+  }) => {
+    const { reference, transaction, message, status } = data;
+    createOrder({
+      variables: {
+        data: {
+          orderNumber: reference,
+          state: selectedState,
+          country: selectedCountry,
+          referenceNumber: reference,
+          transactionNumber: transaction,
+          subtotal: getCartTotalPrice(),
+          discount: 0,
+          deliveryFee: selectedStateFee,
+          total: getCartTotalPrice() + selectedStateFee,
+          lineItems: {
+            create: cart.map(item => ({
+              image: item.product.mainImage.publicUrl,
+              name: item.product.name,
+              category: item.product.category.name,
+              quantity: item.quantity,
+              price: item.product.price
+            }))
+          },
+          name,
+          address,
+          phoneNumber,
+          email,
+          message,
+          status
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     if (data) {
@@ -69,10 +115,10 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
   }, [data]);
 
   useEffect(() => {
-    const newTotalAmount = getCartTotalPrice() + deliveryDetails?.fee || 0;
+    const newTotalAmount = getCartTotalPrice() + selectedStateFee;
     if (newTotalAmount === totalAmount) return;
     setTotalAmount(newTotalAmount);
-  }, [deliveryDetails, cart]);
+  }, [selectedStateFee, cart]);
 
   useEffect(() => {
     updateDeliveryDetails({
@@ -80,8 +126,9 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
       state: selectedState,
       fee: selectedStateFee,
       address,
+      name,
       email,
-      phone
+      phoneNumber
     });
     setBtnPayDisabled(
       !!!(
@@ -89,11 +136,20 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
         selectedState &&
         selectedStateFee &&
         address &&
+        name &&
         email &&
-        phone
+        phoneNumber
       )
     );
-  }, [selectedCountry, selectedState, selectedStateFee, address, email, phone]);
+  }, [
+    selectedCountry,
+    selectedState,
+    selectedStateFee,
+    address,
+    name,
+    email,
+    phoneNumber
+  ]);
 
   return (
     <div className='col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50'>
@@ -176,6 +232,16 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
               <div className='bor8 bg0 m-b-12'>
                 <input
                   className='stext-111 cl8 plh3 size-111 p-lr-15'
+                  type='name'
+                  name='name'
+                  placeholder='Enter your Name'
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+              <div className='bor8 bg0 m-b-12'>
+                <input
+                  className='stext-111 cl8 plh3 size-111 p-lr-15'
                   type='email'
                   name='email'
                   placeholder='Enter your Email'
@@ -189,8 +255,8 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
                   type='phone'
                   name='phone'
                   placeholder='Enter your Phone No.'
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  value={phoneNumber}
+                  onChange={e => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -208,7 +274,7 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart }) => {
           className='flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer btn-pay'
           disabled={btnPayDisabled}
           onClick={() => {
-            initializePayment(onSuccess, onClose);
+            initializePayment(onSuccess);
           }}>
           Proceed to Payment
         </button>

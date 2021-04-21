@@ -97,8 +97,9 @@ export type DeliveryDetails = {
   country?: string;
   state?: string;
   address?: string;
+  name?: string;
   email?: string;
-  phone?: string;
+  phoneNumber?: string;
 };
 
 export type SelectOptions<T> = {

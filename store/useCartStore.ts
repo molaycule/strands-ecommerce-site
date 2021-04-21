@@ -11,6 +11,7 @@ type CartState = {
     callback?: () => void
   ) => void;
   removeFromCartHandler: (productId: string, callback?: () => void) => void;
+  clearCart: () => void;
 };
 
 export const useCartStore = create<CartState>(
@@ -52,6 +53,9 @@ export const useCartStore = create<CartState>(
       removeFromCartHandler: (productId, callback) => {
         if (callback) callback(); // invoke callback function
         set({ cart: get().cart.filter(item => item.product.id !== productId) });
+      },
+      clearCart: () => {
+        set({ cart: get().cart.filter(() => false) });
       }
     }),
     {

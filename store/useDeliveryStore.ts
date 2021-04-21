@@ -8,8 +8,9 @@ type DeliveryState = {
     country,
     state,
     address,
+    name,
     email,
-    phone
+    phoneNumber
   }: DeliveryDetails) => void;
 };
 

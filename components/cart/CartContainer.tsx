@@ -19,6 +19,7 @@ export interface CartContainerProps {
 
 const CartContainer: FC<CartContainerProps> = ({ checkout }) => {
   const cart = useCartStore(state => state.cart);
+  const clearCart = useCartStore(state => state.clearCart);
 
   return (
     <>
@@ -42,7 +43,9 @@ const CartContainer: FC<CartContainerProps> = ({ checkout }) => {
         <div className='container'>
           <div className='row'>
             <CartTable cart={cart} checkout={checkout} />
-            {checkout && cart.length > 0 && <CartCheckout cart={cart} />}
+            {checkout && cart.length > 0 && (
+              <CartCheckout cart={cart} clearCart={clearCart} />
+            )}
           </div>
         </div>
       </div>
