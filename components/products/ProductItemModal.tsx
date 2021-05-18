@@ -98,6 +98,8 @@ const ProductItemModal = () => {
     }
   }, [isProductInCart, product]);
 
+  console.log(product);
+
   return (
     <div className='wrap-modal1 js-modal1 p-t-60 p-b-20'>
       {product && (
@@ -162,6 +164,9 @@ const ProductItemModal = () => {
                     <span className='mtext-106 cl2'>
                       ₦{product.price.toFixed(2)}
                     </span>
+                    <div className='mtext-104 cl2'>
+                      {product.quantityInStock ? 'In stock' : 'Out of stock'}
+                    </div>
                     <p className='stext-102 cl3 p-t-23'>
                       {product.description}
                     </p>
@@ -187,8 +192,9 @@ const ProductItemModal = () => {
                             />
                           </div>
                           <button
-                            className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail'
-                            onClick={cartBtnHandler}>
+                            className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail btn-cart'
+                            onClick={cartBtnHandler}
+                            disabled={product.quantityInStock === 0}>
                             {isProductInCart
                               ? 'Remove from cart'
                               : 'Add to cart'}

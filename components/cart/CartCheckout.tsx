@@ -8,7 +8,7 @@ import { AllDeliveryFees } from 'types';
 import { ALL_DELIVERY_FEES } from 'graphql/queries';
 import { usePaystackPayment } from 'react-paystack';
 import { useMutation } from '@apollo/client';
-import { CREATE_ORDER } from 'graphql/mutations';
+import { CREATE_ORDER, UPDATE_PRODUCT } from 'graphql/mutations';
 import swal from 'sweetalert';
 
 interface CartCheckoutProps {
@@ -17,6 +17,7 @@ interface CartCheckoutProps {
 }
 
 const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
+  const [updateProduct] = useMutation(UPDATE_PRODUCT);
   const [createOrder] = useMutation(CREATE_ORDER, {
     onCompleted({ createOrder }) {
       const { orderNumber } = createOrder;
@@ -27,6 +28,16 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
       ).then(() => {
         clearCart();
         window.scroll(0, 0);
+      });
+      cart.forEach(item => {
+        updateProduct({
+          variables: {
+            id: item.product.id,
+            data: {
+              quantityInStock: item.product.quantityInStock - item.quantity
+            }
+          }
+        });
       });
     }
   });

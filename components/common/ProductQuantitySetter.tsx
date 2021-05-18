@@ -19,7 +19,7 @@ const ProductQuantitySetter: FC<ProductQuantitySetterProps> = ({
   const addToCartHandler = useCartStore(state => state.addToCartHandler);
 
   const decrementNumberOfProductHandler = () => {
-    if (numberOfProduct === 1) return;
+    if (numberOfProduct === 1 || product.quantityInStock === 0) return;
 
     if (isProductInCart) {
       addToCartHandler(product, numberOfProduct - 1);
@@ -28,6 +28,12 @@ const ProductQuantitySetter: FC<ProductQuantitySetterProps> = ({
   };
 
   const incrementNumberOfProductHandler = () => {
+    if (
+      numberOfProduct >= product.quantityInStock ||
+      product.quantityInStock === 0
+    )
+      return;
+
     if (isProductInCart) {
       addToCartHandler(product, numberOfProduct + 1);
     }

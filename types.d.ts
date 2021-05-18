@@ -45,6 +45,7 @@ export type Product = {
   name: string;
   description: string;
   price: number;
+  quantityInStock: number;
   category: {
     name: string;
   };

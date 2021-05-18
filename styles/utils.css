@@ -18655,3 +18655,11 @@ iframe {
   background-color: #222 !important;
   color: #fff !important;
 }
+
+.btn-cart:disabled, .btn-cart:disabled:hover {
+  opacity: 0.2;
+  border-color: #222 !important;
+  background-color: #222 !important;
+  color: #fff !important;
+  cursor: not-allowed;
+}

@@ -57,14 +57,14 @@ export const ALL_PRODUCTS = gql`
     $first: Int
   ) {
     _allProductsMeta(
-      where: { isAvailable: true, category: { name_contains: $categoryName } }
+      where: { category: { name_contains: $categoryName } }
       sortBy: $sortBy
       search: $search
     ) {
       count
     }
     allProducts(
-      where: { isAvailable: true, category: { name_contains: $categoryName } }
+      where: { category: { name_contains: $categoryName } }
       sortBy: $sortBy
       search: $search
       skip: $skip
@@ -74,6 +74,7 @@ export const ALL_PRODUCTS = gql`
       name
       description
       price
+      quantityInStock
       category {
         name
       }
