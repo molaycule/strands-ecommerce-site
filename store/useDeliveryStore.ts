@@ -5,8 +5,8 @@ type DeliveryState = {
   deliveryDetails: DeliveryDetails;
   updateDeliveryDetails: ({
     fee,
-    country,
-    state,
+    region,
+    area,
     address,
     name,
     email,

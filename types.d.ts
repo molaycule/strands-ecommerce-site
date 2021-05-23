@@ -82,21 +82,22 @@ export type CartItem = {
   quantity: number;
 };
 
-export type AllDeliveryFees = {
-  allDeliveryFees: {
-    id: string;
-    state: string;
-    fee: number;
-    country: {
-      name: string;
-    };
+export type Region = {
+  name: string;
+  fee: number;
+};
+
+export type AllAreas = {
+  allAreas: {
+    area: string;
+    region: Region;
   }[];
 };
 
 export type DeliveryDetails = {
   fee?: number;
-  country?: string;
-  state?: string;
+  region?: string;
+  area?: string;
   address?: string;
   name?: string;
   email?: string;

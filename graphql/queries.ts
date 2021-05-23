@@ -91,14 +91,13 @@ export const ALL_PRODUCTS = gql`
   }
 `;
 
-export const ALL_DELIVERY_FEES = gql`
+export const ALL_AREAS = gql`
   query {
-    allDeliveryFees(where: { isDeliveryAllowed: true }, sortBy: state_ASC) {
-      id
-      state
-      fee
-      country {
+    allAreas {
+      area
+      region {
         name
+        fee
       }
     }
   }

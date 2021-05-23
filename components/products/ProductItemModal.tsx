@@ -98,8 +98,6 @@ const ProductItemModal = () => {
     }
   }, [isProductInCart, product]);
 
-  console.log(product);
-
   return (
     <div className='wrap-modal1 js-modal1 p-t-60 p-b-20'>
       {product && (

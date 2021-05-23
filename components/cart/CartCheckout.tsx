@@ -4,8 +4,8 @@ import { CartItem, SelectOptions } from 'types';
 import { useCartStore } from 'store/useCartStore';
 import { useDeliveryStore } from 'store/useDeliveryStore';
 import { useQuery } from '@apollo/client';
-import { AllDeliveryFees } from 'types';
-import { ALL_DELIVERY_FEES } from 'graphql/queries';
+import { AllAreas } from 'types';
+import { ALL_AREAS } from 'graphql/queries';
 import { usePaystackPayment } from 'react-paystack';
 import { useMutation } from '@apollo/client';
 import { CREATE_ORDER, UPDATE_PRODUCT } from 'graphql/mutations';
@@ -26,18 +26,18 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
         `Thank you for your order. Your order number is ${orderNumber}`,
         'success'
       ).then(() => {
+        cart.forEach(item => {
+          updateProduct({
+            variables: {
+              id: item.product.id,
+              data: {
+                quantityInStock: item.product.quantityInStock - item.quantity
+              }
+            }
+          });
+        });
         clearCart();
         window.scroll(0, 0);
-      });
-      cart.forEach(item => {
-        updateProduct({
-          variables: {
-            id: item.product.id,
-            data: {
-              quantityInStock: item.product.quantityInStock - item.quantity
-            }
-          }
-        });
       });
     }
   });
@@ -46,15 +46,12 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
     state => state.updateDeliveryDetails
   );
   const deliveryDetails = useDeliveryStore(state => state.deliveryDetails);
-  const { data } = useQuery<AllDeliveryFees>(ALL_DELIVERY_FEES);
-  const [deliveryByCountry, setDeliveryByCountry] = useState({});
-  const [selectedCountry, setSelectedCountry] = useState<string>(
-    deliveryDetails?.country || ''
+  const { data } = useQuery<AllAreas>(ALL_AREAS);
+  const [selectedRegion, setSelectedRegion] = useState<string>(
+    deliveryDetails?.region || ''
   );
-  const [selectedState, setSelectedState] = useState(
-    deliveryDetails?.state || ''
-  );
-  const [selectedStateFee, setSelectedStateFee] = useState(
+  const [selectedArea, setSelectedArea] = useState(deliveryDetails?.area || '');
+  const [selectedAreaFee, setSelectedAreaFee] = useState(
     deliveryDetails?.fee || 0
   );
   const [address, setAddress] = useState<string>(
@@ -85,14 +82,14 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
       variables: {
         data: {
           orderNumber: reference,
-          state: selectedState,
-          country: selectedCountry,
+          area: selectedArea,
+          region: selectedRegion,
           referenceNumber: reference,
           transactionNumber: transaction,
           subtotal: getCartTotalPrice(),
           discount: 0,
-          deliveryFee: selectedStateFee,
-          total: getCartTotalPrice() + selectedStateFee,
+          deliveryFee: selectedAreaFee,
+          total: getCartTotalPrice() + selectedAreaFee,
           lineItems: {
             create: cart.map(item => ({
               image: item.product.mainImage.publicUrl,
@@ -114,28 +111,16 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
   };
 
   useEffect(() => {
-    if (data) {
-      setDeliveryByCountry(() => {
-        let groupByCountry = data.allDeliveryFees.reduce((acc, cur) => {
-          acc[cur.country.name] = [...(acc[cur.country.name] || []), cur];
-          return acc;
-        }, {});
-        return groupByCountry;
-      });
-    }
-  }, [data]);
-
-  useEffect(() => {
-    const newTotalAmount = getCartTotalPrice() + selectedStateFee;
+    const newTotalAmount = getCartTotalPrice() + selectedAreaFee;
     if (newTotalAmount === totalAmount) return;
     setTotalAmount(newTotalAmount);
-  }, [selectedStateFee, cart]);
+  }, [selectedAreaFee, cart]);
 
   useEffect(() => {
     updateDeliveryDetails({
-      country: selectedCountry,
-      state: selectedState,
-      fee: selectedStateFee,
+      region: selectedRegion,
+      area: selectedArea,
+      fee: selectedAreaFee,
       address,
       name,
       email,
@@ -143,9 +128,9 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
     });
     setBtnPayDisabled(
       !!!(
-        selectedCountry &&
-        selectedState &&
-        selectedStateFee &&
+        selectedRegion &&
+        selectedArea &&
+        selectedAreaFee &&
         address &&
         name &&
         email &&
@@ -153,9 +138,9 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
       )
     );
   }, [
-    selectedCountry,
-    selectedState,
-    selectedStateFee,
+    selectedRegion,
+    selectedArea,
+    selectedAreaFee,
     address,
     name,
     email,
@@ -171,9 +156,7 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
             <span className='stext-110 cl2'>Delivery Fee:</span>
           </div>
           <div className='size-209'>
-            <span className='mtext-110 cl2'>
-              ₦{selectedStateFee.toFixed(2)}
-            </span>
+            <span className='mtext-110 cl2'>₦{selectedAreaFee.toFixed(2)}</span>
           </div>
         </div>
         <div className='flex-w flex-t bor12 p-t-15 p-b-30'>
@@ -186,48 +169,29 @@ const CartCheckout: FC<CartCheckoutProps> = ({ cart, clearCart }) => {
             </p>
             <div className='p-t-15'>
               <span className='stext-112 cl8'>Enter your details</span>
-              <div className='rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9'>
-                <Select
-                  instanceId='country'
-                  options={Object.keys(deliveryByCountry)
-                    .sort()
-                    .map<SelectOptions<string>>(country => ({
-                      label: country,
-                      value: country
-                    }))}
-                  onChange={(e: SelectOptions<string>) =>
-                    setSelectedCountry(e.value)
-                  }
-                  defaultValue={
-                    deliveryDetails?.country && {
-                      label: deliveryDetails.country,
-                      value: deliveryDetails.country
-                    }
-                  }
-                  placeholder='Select a country'
-                />
-              </div>
               <div className='bor8 bg0 m-b-12'>
                 <Select
-                  instanceId='state'
-                  options={data?.allDeliveryFees.map<SelectOptions<number>>(
-                    item => ({
-                      label: item.state,
-                      value: item.fee
-                    })
-                  )}
+                  instanceId='area'
+                  options={data?.allAreas.map<SelectOptions<number>>(item => ({
+                    label: item.area,
+                    value: item.region.fee
+                  }))}
                   onChange={(e: SelectOptions<number>) => {
-                    setSelectedState(e.label);
-                    setSelectedStateFee(e.value);
+                    setSelectedArea(e.label);
+                    setSelectedRegion(
+                      data?.allAreas.find(item => item.area === e.label).region
+                        .name
+                    );
+                    setSelectedAreaFee(e.value);
                   }}
                   defaultValue={
-                    deliveryDetails?.state &&
+                    deliveryDetails?.area &&
                     deliveryDetails?.fee && {
-                      label: deliveryDetails.state,
+                      label: deliveryDetails.area,
                       value: deliveryDetails.fee
                     }
                   }
-                  placeholder='Select a state'
+                  placeholder='Select your area'
                 />
               </div>
               <div className='bor8 bg0 m-b-12'>
