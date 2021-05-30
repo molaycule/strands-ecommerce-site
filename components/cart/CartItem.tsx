@@ -41,7 +41,14 @@ const CartItem: FC<CartItemProps> = ({ product }) => {
           <img src={product.mainImage.publicUrl} alt='IMG' />
         </div>
       </td>
-      <td className='column-2'>{product.name}</td>
+      <td className='column-2'>
+        {product.name}
+        <a
+          className='header-wishlist-item-info hov-cl1 pointer'
+          onClick={() => removeFromCartHandler(product.id)}>
+          Remove
+        </a>
+      </td>
       <td className='column-3'>₦{product.price.toFixed(2)}</td>
       <td className='column-4'>
         <div className='wrap-num-product flex-w m-l-auto m-r-0'>
