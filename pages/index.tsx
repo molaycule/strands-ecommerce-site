@@ -4,6 +4,9 @@ import PageWrapper from 'components/common/PageWrapper';
 import { useSpring, animated } from 'react-spring';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useQuery } from '@apollo/client';
+import { TOP_CATEGORIES } from 'graphql/queries';
+import { AllTopCategories } from 'types';
 
 const BannerSlide = dynamic(() => import('components/banner/BannerSlide'), {
   ssr: false
@@ -20,6 +23,8 @@ const ProductOverview = dynamic(
 );
 
 export default function Home() {
+  const { data } = useQuery<AllTopCategories>(TOP_CATEGORIES);
+
   const animProps = useSpring({
     opacity: 1,
     from: { opacity: Cookies.get('onload') ? 1 : 0 },
@@ -32,9 +37,9 @@ export default function Home() {
 
   return (
     <animated.div style={animProps}>
-      <PageWrapper isHomePage>
+      <PageWrapper isHomePage allTopCategories={data?.allTopCategories}>
         <BannerSlide />
-        <TopCategories />
+        <TopCategories allTopCategories={data?.allTopCategories} />
         <ProductOverview />
         <ProductItemModal />
       </PageWrapper>

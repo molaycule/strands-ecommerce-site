@@ -1,32 +1,36 @@
-const Footer = () => {
+import { FC } from 'react';
+import { AllTopCategoriesData } from 'types';
+
+interface FooterProps {
+  allTopCategories: AllTopCategoriesData;
+}
+
+const Footer: FC<FooterProps> = ({ allTopCategories }) => {
   return (
     <footer className='bg3 p-t-75 p-b-32'>
       <div className='container'>
         <div className='row'>
           <div className='col-sm-6 col-lg-3 p-b-50'>
             <h4 className='stext-301 cl0 p-b-30'>Categories</h4>
-            <ul>
-              <li className='p-b-10'>
-                <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                  Women
-                </a>
-              </li>
-              <li className='p-b-10'>
-                <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                  Men
-                </a>
-              </li>
-              <li className='p-b-10'>
-                <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                  Shoes
-                </a>
-              </li>
-              <li className='p-b-10'>
-                <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                  Watches
-                </a>
-              </li>
-            </ul>
+            {allTopCategories?.map(item => (
+              <ul key={item.id}>
+                <li className='p-b-10'>
+                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
+                    {item.category1.name}
+                  </a>
+                </li>
+                <li className='p-b-10'>
+                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
+                    {item.category2.name}
+                  </a>
+                </li>
+                <li className='p-b-10'>
+                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
+                    {item.category3.name}
+                  </a>
+                </li>
+              </ul>
+            ))}
           </div>
           <div className='col-sm-6 col-lg-3 p-b-50'>
             <h4 className='stext-301 cl0 p-b-30'>Help</h4>

@@ -8,6 +8,7 @@ import ScrollToTop from 'react-scroll-to-top';
 import routes from 'routes';
 import BackToTop from './BackToTop';
 import CookieConsent from 'react-cookie-consent';
+import { AllTopCategoriesData } from 'types';
 
 const Header = dynamic(() => import('layout/Header'), { ssr: false });
 const WishlistPanel = dynamic(
@@ -20,11 +21,13 @@ const CartPanel = dynamic(() => import('components/cart/CartPanel'), {
 
 interface PageWrapperProps {
   isHomePage?: boolean;
+  allTopCategories: AllTopCategoriesData;
   children: ReactNode | ReactNode[];
 }
 
 const PageWrapper: FC<PageWrapperProps> = ({
   isHomePage = false,
+  allTopCategories,
   children
 }) => {
   const appName = 'Strands';
@@ -97,7 +100,7 @@ const PageWrapper: FC<PageWrapperProps> = ({
       {children}
       <CartPanel />
       <WishlistPanel />
-      <Footer />
+      <Footer allTopCategories={allTopCategories} />
       <ScrollToTop smooth component={<BackToTop scale={0.5} />} />
       <CookieConsent
         location='bottom'

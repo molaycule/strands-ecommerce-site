@@ -1,17 +1,18 @@
-import { useQuery } from '@apollo/client';
-import { TOP_CATEGORIES } from 'graphql/queries';
+import { FC } from 'react';
 import Category from './Category';
-import { AllTopCategories } from 'types';
 import { Fragment } from 'react';
+import { AllTopCategoriesData } from 'types';
 
-const TopCategories = () => {
-  const { data } = useQuery<AllTopCategories>(TOP_CATEGORIES);
+interface TopCategoriesProps {
+  allTopCategories: AllTopCategoriesData;
+}
 
+const TopCategories: FC<TopCategoriesProps> = ({ allTopCategories }) => {
   return (
     <div className='sec-banner bg0 p-t-80 p-b-50'>
       <div className='container'>
         <div className='row'>
-          {data?.allTopCategories.map(item => (
+          {allTopCategories?.map(item => (
             <Fragment key={item.id}>
               <Category
                 title={item.category1.name}
