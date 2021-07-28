@@ -169,16 +169,6 @@ const ProductItemModal = () => {
                       {product.description}
                     </p>
                     <div className='p-t-33'>
-                      {/* <div className='flex-w flex-r-m p-b-10'>
-                        <div className='size-203 flex-c-m respon6'>Color</div>
-                        <div className='size-204 respon6-next'>
-                          <Select
-                            instanceId='color'
-                            options={colorOptions}
-                            placeholder='Choose an option'
-                          />
-                        </div>
-                      </div> */}
                       <div className='flex-w flex-r-s p-b-10'>
                         <div className='size-204 flex-w flex-m respon6-next'>
                           <div className='wrap-num-product flex-w m-r-20 m-tb-10'>

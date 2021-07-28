@@ -21,7 +21,7 @@ const CartPanel = dynamic(() => import('components/cart/CartPanel'), {
 
 interface PageWrapperProps {
   isHomePage?: boolean;
-  allTopCategories: AllTopCategoriesData;
+  allTopCategories?: AllTopCategoriesData;
   children: ReactNode | ReactNode[];
 }
 
