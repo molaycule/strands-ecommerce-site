@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import ProductItemModal from 'components/products/ProductItemModal';
 import PageWrapper from 'components/common/PageWrapper';
@@ -37,6 +38,12 @@ export default function Home() {
 
   return (
     <animated.div style={animProps}>
+      <Head>
+        <script
+          id='mcjs'
+          type='text/javascript'
+          src='/static/mailchimp.js'></script>
+      </Head>
       <PageWrapper isHomePage allTopCategories={data?.allTopCategories}>
         <BannerSlide />
         <TopCategories allTopCategories={data?.allTopCategories} />
