@@ -43,6 +43,7 @@ export default function Home() {
           id='mcjs'
           type='text/javascript'
           src='/static/mailchimp.js'></script>
+        <script type='text/javascript' src='/static/tawkto.js'></script>
       </Head>
       <PageWrapper isHomePage allTopCategories={data?.allTopCategories}>
         <BannerSlide />
