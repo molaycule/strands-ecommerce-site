@@ -25,7 +25,7 @@ const Slide: FC<SlideProps> = ({ title, subtitle, imageUrl }) => {
               {title.toUpperCase()}
             </h2>
           </div>
-          <div className='layer-slick1'>
+          <div className='layer-slick1' style={{ zIndex: 2 }}>
             <Link href={routes.products}>
               <a className='flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04'>
                 Shop Now
