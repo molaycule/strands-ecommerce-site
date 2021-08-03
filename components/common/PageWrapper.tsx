@@ -59,6 +59,10 @@ const PageWrapper: FC<PageWrapperProps> = ({
         pageHeaderLink = PageHeaderLinks.Contact;
         pageTitle = `${appName} | Contact`;
         break;
+      case routes.faq:
+        pageHeaderLink = PageHeaderLinks.FAQ;
+        pageTitle = `${appName} | FAQ`;
+        break;
       default:
         pageHeaderLink = PageHeaderLinks.Home;
         pageTitle = `${appName} | Home`;

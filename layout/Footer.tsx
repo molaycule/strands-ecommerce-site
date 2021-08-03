@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import Link from 'next/link';
+import routes from 'routes';
 import { AllTopCategoriesData } from 'types';
 
 interface FooterProps {
@@ -46,9 +48,11 @@ const Footer: FC<FooterProps> = ({ allTopCategories }) => {
                 </a>
               </li>
               <li className='p-b-10'>
-                <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                  FAQs
-                </a>
+                <Link href={routes.faq}>
+                  <a className='stext-107 cl7 hov-cl1 trans-04'>
+                    FAQs
+                  </a>
+                </Link>
               </li>
             </ul>
           </div>

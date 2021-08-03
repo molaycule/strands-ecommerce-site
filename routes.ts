@@ -4,5 +4,6 @@ export default {
   cart: '/cart',
   checkout: '/cart/checkout',
   about: '/about',
+  faq: '/faq',
   contact: '/contact'
 };

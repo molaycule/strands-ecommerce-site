@@ -65,15 +65,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
               Free delivery for standard order over ₦35,000
             </div>
             <div className='right-top-bar flex-w h-full'>
-              <a href='#' className='flex-c-m trans-04 p-lr-25'>
-                Help & FAQs
-              </a>
-              <a href='#' className='flex-c-m trans-04 p-lr-25'>
-                EN
-              </a>
-              <a href='#' className='flex-c-m trans-04 p-lr-25'>
-                NGN
-              </a>
+              <Link href={routes.faq}>
+                <a className='flex-c-m trans-04 p-lr-25'>Help & FAQs</a>
+              </Link>
             </div>
           </div>
         </div>
@@ -131,6 +125,14 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
                   }>
                   <Link href={routes.contact}>
                     <a>Contact</a>
+                  </Link>
+                </li>
+                <li
+                  className={
+                    activeLink === PageHeaderLinks.FAQ ? 'active-menu' : null
+                  }>
+                  <Link href={routes.faq}>
+                    <a>FAQ</a>
                   </Link>
                 </li>
               </ul>
@@ -197,15 +199,9 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
           </li>
           <li>
             <div className='right-top-bar flex-w h-full'>
-              <a href='#' className='flex-c-m p-lr-10 trans-04'>
-                Help & FAQs
-              </a>
-              <a href='#' className='flex-c-m p-lr-10 trans-04'>
-                EN
-              </a>
-              <a href='#' className='flex-c-m p-lr-10 trans-04'>
-                NGN
-              </a>
+              <Link href={routes.faq}>
+                <a className='flex-c-m p-lr-10 trans-04'>Help & FAQs</a>
+              </Link>
             </div>
           </li>
         </ul>
@@ -233,6 +229,11 @@ const Header: FC<HeaderProps> = ({ isHomePage, activeLink }) => {
           <li>
             <Link href={routes.contact}>
               <a>Contact</a>
+            </Link>
+          </li>
+          <li>
+            <Link href={routes.faq}>
+              <a>FAQ</a>
             </Link>
           </li>
         </ul>

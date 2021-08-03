@@ -12,7 +12,8 @@ export enum PageHeaderLinks {
   Products,
   Cart,
   About,
-  Contact
+  Contact,
+  FAQ
 }
 
 export enum SortProductsBy {
