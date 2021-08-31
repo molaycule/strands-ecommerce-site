@@ -148,6 +148,7 @@ const ProductOverview: FC<ProductOverviewProps> = ({ showTitle = true }) => {
           ? `${categoryName.charAt(0).toUpperCase()}${categoryName.slice(1)}`
           : null
       );
+      productFilterHandler(categoryName.toUpperCase());
     }
 
     if (!searchProduct && router.query['search']) {
