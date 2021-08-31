@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import routes from 'routes';
 import { AllTopCategoriesData } from 'types';
@@ -8,6 +9,8 @@ interface FooterProps {
 }
 
 const Footer: FC<FooterProps> = ({ allTopCategories }) => {
+  const router = useRouter();
+
   return (
     <footer className='bg3 p-t-75 p-b-32'>
       <div className='container'>
@@ -16,20 +19,50 @@ const Footer: FC<FooterProps> = ({ allTopCategories }) => {
             <h4 className='stext-301 cl0 p-b-30'>Categories</h4>
             {allTopCategories?.map(item => (
               <ul key={item.id}>
-                <li className='p-b-10'>
-                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                    {item.category1.name}
-                  </a>
+                <li className='p-b-10 pointer'>
+                  <Link
+                    href={{
+                      pathname: '/products',
+                      query: {
+                        ...router.query,
+                        category: item.category1.name.toLowerCase()
+                      }
+                    }}
+                    shallow>
+                    <a className='stext-107 cl7 hov-cl1 trans-04'>
+                      {item.category1.name}
+                    </a>
+                  </Link>
                 </li>
-                <li className='p-b-10'>
-                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                    {item.category2.name}
-                  </a>
+                <li className='p-b-10 pointer'>
+                  <Link
+                    href={{
+                      pathname: '/products',
+                      query: {
+                        ...router.query,
+                        category: item.category2.name.toLowerCase()
+                      }
+                    }}
+                    shallow>
+                    <a className='stext-107 cl7 hov-cl1 trans-04'>
+                      {item.category2.name}
+                    </a>
+                  </Link>
                 </li>
-                <li className='p-b-10'>
-                  <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
-                    {item.category3.name}
-                  </a>
+                <li className='p-b-10 pointer'>
+                  <Link
+                    href={{
+                      pathname: '/products',
+                      query: {
+                        ...router.query,
+                        category: item.category3.name.toLowerCase()
+                      }
+                    }}
+                    shallow>
+                    <a className='stext-107 cl7 hov-cl1 trans-04'>
+                      {item.category3.name}
+                    </a>
+                  </Link>
                 </li>
               </ul>
             ))}
@@ -37,21 +70,19 @@ const Footer: FC<FooterProps> = ({ allTopCategories }) => {
           <div className='col-sm-6 col-lg-3 p-b-50'>
             <h4 className='stext-301 cl0 p-b-30'>Help</h4>
             <ul>
-              <li className='p-b-10'>
+              {/* <li className='p-b-10'>
                 <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
                   Track Order
                 </a>
-              </li>
-              <li className='p-b-10'>
+              </li> */}
+              {/* <li className='p-b-10'>
                 <a href='#' className='stext-107 cl7 hov-cl1 trans-04'>
                   Delivery
                 </a>
-              </li>
+              </li> */}
               <li className='p-b-10'>
                 <Link href={routes.faq}>
-                  <a className='stext-107 cl7 hov-cl1 trans-04'>
-                    FAQs
-                  </a>
+                  <a className='stext-107 cl7 hov-cl1 trans-04'>FAQs</a>
                 </Link>
               </li>
             </ul>

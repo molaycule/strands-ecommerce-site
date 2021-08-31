@@ -1,8 +1,13 @@
 import PageWrapper from 'components/common/PageWrapper';
+import { useQuery } from '@apollo/client';
+import { TOP_CATEGORIES } from 'graphql/queries';
+import { AllTopCategories } from 'types';
 
 const about = () => {
+  const { data } = useQuery<AllTopCategories>(TOP_CATEGORIES);
+
   return (
-    <PageWrapper>
+    <PageWrapper allTopCategories={data?.allTopCategories}>
       <section className='bg-img1 txt-center p-lr-15 p-tb-92'>
         <h2 className='ltext-105 cl0 txt-center'>About</h2>
       </section>
